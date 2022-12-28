@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+</head>
+<body>
+<div th:switch="${events}">
+    <h2 th:case="null">No events found!</h2>
+    <div th:case="*">
+        <h2>Events</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>City</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event : ${events}">
+                <td th:text="${event.id}"></td>
+                <td><a th:href="@{event/{id}(id=${event.id})}" th:text="${event.name}"></a></td>
+<!--                <td><a th:href="@{events/{id}/teams(id=${event.id})}" th:text="${event.name}"></a></td>-->
+                <td th:text="${event.place}"></td>
+                <td><a th:href="@{event-update/{id}(id=${event.id})}">Edit</a></td>
+                <td><a th:href="@{event-delete/{id}(id=${event.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/event-create">Create event</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Update team</title>
+</head>
+<body>
+<form action="#" th:action="@{/team-update}" th:object="${team}" method="post">
+    <label for="id">ID</label>
+    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
+    <br/>
+    <label for="name">Title</label>
+    <input type="text" th:field="*{name}" id="name" placeholder="title">
+    <br/>
+    <label for="coach">City</label>
+    <input type="text" th:field="*{coach}" id="coach" placeholder="coach">
+    <br/>
+    <input type="submit" value="Update team">
+</form>
+</body>
+</html>
