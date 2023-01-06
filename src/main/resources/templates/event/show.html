@@ -6,23 +6,21 @@
     <title>Show</title>
 </head>
 <body>
-<p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
+<p th:text="${event.getName() + ', ' + event.getPlace()}">VALUE</p>
 
-<div th:if="${books.isEmpty()}">
-    <p>Человек пока не взял ни одной книги</p>
+<div th:if="${teams.isEmpty()}">
+    <p>In event no teams</p>
     <hr/>
 </div>
 
-<div th:if="${!books.isEmpty()}">
+<div th:if="${!teams.isEmpty()}">
     <hr/>
-    <b>Книги:</b>
+    <b>Teams:</b>
     <br/>
-    <table th:each="book : ${books}">
+    <table th:each="team : ${teams}">
         <tr>
             <td>
-                <span th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}"
-                   th:style="${book.isExpired()} ? 'color: red' : 'color: black'">
-                    book
+                <span th:text="${team.getName() + ', ' + team.getCoach()}">
                 </span>
             </td>
         </tr>
@@ -30,12 +28,12 @@
     <hr/>
 </div>
 
-<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
-    <input type="submit" value="Редактировать"/>
+<form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
+    <input type="submit" value="Edit"/>
 </form>
 
-<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
-    <input type="submit" value="Удалить"/>
+<form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
+    <input type="submit" value="Delete"/>
 </form>
 
 </body>

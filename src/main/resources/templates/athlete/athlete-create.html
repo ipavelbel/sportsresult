@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Athlete team</title>
 </head>
 <body>
-<form action="#" th:action="@{/athlete-create}" th:object="${athlete}" method="post">
+<form action="#" th:action="@{/athletes}" th:object="${athlete}" th:method="post">
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name" placeholder="name">
-  <br>
+    <br>
     <label for="surname">Surname</label>
     <input type="text" th:field="*{surname}" id="surname" placeholder="surname">
-  <br>
+    <br>
+    <label for="age">Age</label>
+    <input type="text" th:field="*{age}" id="age" placeholder="age">
+    <br>
     <input type="submit" value="Create athlete">
 </form>
 </body>

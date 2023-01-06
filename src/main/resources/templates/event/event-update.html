@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Update event</title>
 </head>
 <body>
-<form action="#" th:action="@{/event-update}" th:object="${event}" method="post">
+<form action="#" th:action="@{/events/{id}(id=${event.getId()})}" th:object="${event}" th:method="PATCH">
     <label for="id">ID</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
     <br/>
-    <label for="firstName">Title</label>
-    <input type="text" th:field="*{name}" id="firstName" placeholder="First Name">
+    <label for="name">Title</label>
+    <input type="text" th:field="*{name}" id="name" placeholder="name">
     <br/>
-    <label for="lastName">City</label>
-    <input type="text" th:field="*{place}" id="lastName" placeholder="Last Name">
+    <label for="place">City</label>
+    <input type="text" th:field="*{place}" id="place" placeholder="place">
     <br/>
-    <input type="submit" value="Update User">
+    <input type="submit" value="Update Event!">
 </form>
 </body>
 </html>

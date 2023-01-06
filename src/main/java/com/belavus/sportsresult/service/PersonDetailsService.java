@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/**
- * @author Neil Alishev
- */
+
 @Service
-public class PersonDetailsService implements UserDetailsService {
+public class PersonDetailsService implements UserDetailsService { // TODO: n.kvetko: code formatting
 
     private final PeopleRepository peopleRepository;
 

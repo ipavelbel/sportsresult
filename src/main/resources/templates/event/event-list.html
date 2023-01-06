@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Events</title>
@@ -20,16 +20,20 @@
             <tbody>
             <tr th:each="event : ${events}">
                 <td th:text="${event.id}"></td>
-                <td><a th:href="@{event/{id}(id=${event.id})}" th:text="${event.name}"></a></td>
+                <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.name}"></a></td>
 <!--                <td><a th:href="@{events/{id}/teams(id=${event.id})}" th:text="${event.name}"></a></td>-->
                 <td th:text="${event.place}"></td>
-                <td><a th:href="@{event-update/{id}(id=${event.id})}">Edit</a></td>
-                <td><a th:href="@{event-delete/{id}(id=${event.id})}">Delete</a></td>
+<!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
+                <td><form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
+                    <input type="submit" value="Edit"/></form></td>
+<!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
+                <td><form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
+                    <input type="submit" value="Delete"/></form> </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/event-create">Create event</a></p>
+    <p><a href="/events/new">Create event</a></p>
 </div>
 </body>
 </html>

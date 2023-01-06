@@ -21,7 +21,7 @@ public class AuthController {
     private final RegistrationService registrationService;
     private final PersonValidator personValidator;
 
-@Autowired
+    @Autowired // TODO: n.kvetko: unnecessary annotation and code formatting
     public AuthController(RegistrationService registrationService, PersonValidator personValidator) {
         this.registrationService = registrationService;
         this.personValidator = personValidator;
@@ -29,21 +29,22 @@ public class AuthController {
 
 
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginPage(){ // TODO: n.kvetko: code formatting
         return "welcome/login";
     }
 
     @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person) {
+    public String registrationPage(@ModelAttribute("person") Person person) { // TODO: n.kvetko: unused parameters (?)
         return "welcome/registration";
     }
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("person") @Valid Person person,
-                                      BindingResult bindingResult) {
+                                      BindingResult bindingResult) { // TODO: n.kvetko:  unnecessary line break;
+                                                                     // TODO: n.kvetko line length is usually 120,but it depends on the project
         personValidator.validate(person, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) // TODO: n.kvetko add braces to "if" statement
             return "/welcome/registration";
 
         registrationService.register(person);

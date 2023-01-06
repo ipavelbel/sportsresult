@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Create event</title>
 </head>
 <body>
-<form action="#" th:action="@{/event-create}" th:object="${event}" method="post">
-    <label for="firstName">Title</label>
-    <input type="text" th:field="*{name}" id="firstName" placeholder="name">
+<form action="#" th:action="@{/events}" th:object="${event}" th:method="post">
+    <label for="name">Title</label>
+    <input type="text" th:field="*{name}" id="name" placeholder="name">
   <br>
-    <label for="lastName">City</label>
-    <input type="text" th:field="*{place}" id="lastName" placeholder="city">
+    <label for="place">City</label>
+    <input type="text" th:field="*{place}" id="place" placeholder="city">
   <br>
     <input type="submit" value="Create Event">
 </form>

@@ -15,11 +15,11 @@ public class Person {
     private int id;
 
     @NotEmpty(message = "Name should not empty")
-    @Size(min = 2, max = 100, message = "Name have to from 2 to 100 length  symbol")
+    @Size(min = 2, max = 100, message = "Name have to from 2 to 100 length  symbol") // TODO: n.kvetko grammar
     @Column(name = "username")
     private String username;
 
-    @Min(value = 1900, message = " Year have to bigger then 1900")
+    @Min(value = 1900, message = " Year have to bigger then 1900") // TODO: n.kvetko: grammar
     @Column(name = "year_of_birth")
     private int yearOfBirth;
 
@@ -79,13 +79,5 @@ public class Person {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", yearOfBirth=" + yearOfBirth +
-                ", password='" + password + '\'' +
-                '}';
-    }
+
 }

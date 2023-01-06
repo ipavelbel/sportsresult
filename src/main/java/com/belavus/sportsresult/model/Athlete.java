@@ -4,7 +4,7 @@ import javax.persistence.*;
 import lombok.Data;
 
 
-//@Data
+//@Data // TODO: n.kvetko: ???
 @Entity
 @Table(name = "athletes")
 public class Athlete {
@@ -23,8 +23,17 @@ public class Athlete {
     private int age;
 
     @ManyToOne
-    @JoinColumn(name = "team_id",referencedColumnName = "id")
+    @JoinColumn(name = "team_id", referencedColumnName = "id") // TODO: n.kvetko: perform code formatting
     private Team oneTeam;
+
+    public Athlete() {
+    }
+
+    public Athlete(String name, String surname, int age) {
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+    }
 
     public int getId() {
         return id;

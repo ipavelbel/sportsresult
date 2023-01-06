@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Athletes</title>
@@ -24,13 +24,15 @@
                 <td th:text="${athlete.name}"></td>
                 <td th:text="${athlete.surname}"></td>
                 <td th:text="${athlete.age}"></td>
-                <td><a th:href="@{athlete-update/{id}(id=${athlete.id})}">Edit</a></td>
-                <td><a th:href="@{athlete-delete/{id}(id=${athlete.id})}">Delete</a></td>
+                <td><form th:method="GET" th:action="@{/athletes/{id}/edit(id=${athlete.id})}">
+                    <input type="submit" value="Edit"/></form></td>
+                <td><form th:method="DELETE" th:action="@{/athletes/{id}(id=${athlete.id})}">
+                    <input type="submit" value="Delete"/></form> </td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/athlete-create">Create athlete</a></p>
+    <p><a href="/athletes/new">Create athlete</a></p>
 </div>
 </body>
 </html>

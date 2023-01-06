@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Create team</title>
 </head>
 <body>
-<form action="#" th:action="@{/team-create}" th:object="${team}" method="post">
+<form action="#" th:action="@{/teams}" th:object="${team}" method="post">
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name" placeholder="name">
   <br>

@@ -1,14 +1,11 @@
 package com.belavus.sportsresult.model;
 
 import javax.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
 
-//@Data
+//@Data // TODO: n.kvetko: ???
 @Entity
 @Table(name = "events")
 public class Event {
@@ -21,15 +18,25 @@ public class Event {
     @Column(name = "place")
     private String place;
 
-    @OneToMany(mappedBy ="eventID" )
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE,
+                    CascadeType.REMOVE})
+    @JoinTable(
+            name = "events_teams",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
     private List<Team> teams;
 
     public Event() {
     }
 
-    public Event(String name, String place) {
+
+    public Event(String name, String place, List<Team> teams) {
         this.name = name;
         this.place = place;
+        this.teams = teams;
     }
 
     public int getId() {
@@ -64,13 +71,4 @@ public class Event {
         this.teams = teams;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", place='" + place + '\'' +
-                ", teams=" + teams +
-                '}';
-    }
 }

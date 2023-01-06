@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class RegistrationService {
+public class RegistrationService {  // TODO: n.kvetko: code formatting
 
     private final PeopleRepository peopleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+    @Autowired // TODO: n.kvetko unnecessary annotation
     public RegistrationService(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
         this.peopleRepository = peopleRepository;
         this.passwordEncoder = passwordEncoder;
