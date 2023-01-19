@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Show</title>
+</head>
+<body>
+
+<p th:text="${athlete.getName() + ', ' + athlete.getSurname() + ', ' + athlete.getAge()}">VALUE</p>
+
+<div th:if="${teams}">
+    <span>this athlete without team, you can add team!</span>
+    <form th:method="PATCH" th:action="@{/athletes/{id}/assign(id=${athlete.getId()})}">
+        <label for="team">Choose team</label>
+        <select th:object="${team}" th:field="*{id}" id="team">
+            <option th:each="team : ${teams}" th:value="${team.getId()}" th:text="${team.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="submit"/>
+    </form>
+</div>
+
+<div th:if="${oneTeams}">
+    <hr/>
+    <b>Teams:</b>
+    <br/>
+    <table th:each="oneTeam : ${oneTeams}">
+        <tr>
+            <td>
+                <span>Athlete now in: </span><span th:text="${oneTeam.getName() + ', ' + oneTeam.getCoach()}">
+                </span>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</div>
+
+<!--<div th:if="${oneTeam}">-->
+<!--    <span>Athlete now in: </span> <span th:text="${oneTeam.g}">Team Name</span>-->
+
+<!--    <form th:method="PATCH" th:action="@{/athletes/{id}/release(id=${athlete.getId()})}">-->
+<!--        <input type="submit" value="Delete athlete from team"/>-->
+<!--    </form>-->
+<!--</div>-->
+
+
+
+<hr/>
+
+<!--<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">-->
+<!--    <input type="submit" value="Редактировать"/>-->
+<!--</form>-->
+
+<!--<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">-->
+<!--    <input type="submit" value="Удалить"/>-->
+<!--</form>-->
+
+
+
+</body>
+</html>

@@ -9,13 +9,7 @@
 
 <p th:text="${team.getName() + ', ' + team.getCoach()}">VALUE</p>
 
-<!--<div th:if="${teamInEvent}">-->
-<!--    <span>Книга сейчас у: </span> <span th:text="${teamInEvent.}">Person Name</span>-->
 
-<!--    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">-->
-<!--        <input type="submit" value="Освободить книгу"/>-->
-<!--    </form>-->
-<!--</div>-->
 
 <div th:if="${events}">
     <span>this team without event, you can add event</span>
@@ -28,8 +22,46 @@
         <input type="submit" value="submit"/>
     </form>
 </div>
-
 <hr/>
+<div th:if="${teamsInEvent}">
+    <hr/>
+    <table th:each="teamInEvent : ${teamsInEvent}">
+        <tr>
+            <td>
+                <span>Team now in: </span><span th:text="${teamInEvent.getName() + ', ' + teamInEvent.getPlace()}">
+                </span>
+            </td>
+        </tr>
+    </table>
+
+<!--    <b>Teams:</b>-->
+<!--    <br/>-->
+<!--    <span>Team in Event: </span> <span th:text="${teamInEvent.}">Person Name</span>-->
+
+<!--    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">-->
+<!--        <input type="submit" value="Освободить книгу"/>-->
+<!--    </form>-->
+</div>
+
+<div th:if="${athletes.isEmpty()}">
+    <p>In team no athlete</p>
+    <hr/>
+</div>
+
+<div th:if="${!athletes.isEmpty()}">
+    <hr/>
+    <b>Athletes:</b>
+    <br/>
+    <table th:each="athete : ${athletes}">
+        <tr>
+            <td>
+                <span th:text="${athete.getName() + ', ' + athete.getSurname()}">
+                </span>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</div>
 
 <!--<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">-->
 <!--    <input type="submit" value="Редактировать"/>-->

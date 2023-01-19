@@ -8,8 +8,10 @@ import com.belavus.sportsresult.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TeamService { // TODO: n.kvetko: perform code formatting
@@ -21,9 +23,6 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
         this.teamRepository = teamRepository;
     }
 
-    public Team findById(Integer id){
-        return teamRepository.getOne(id); // TODO: n.kvetko: getOne is deprecated(!) Use getById(ID) instead.
-    }
 
     public List<Team> findAll(){
         return teamRepository.findAll();
@@ -52,20 +51,19 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
         teamRepository.save(updateTeam);
     }
 
-    public List<Event> getTeamInEvent(int id) {
+    public Set<Event> getTeamInEvent(int id) {
         return teamRepository.findById(id).map(Team::getEvents).orElse(null);
     }
 
-    public void assign(int id, List selectedEvent) {
+    public void assign(int id, Set<Event> selectedEvent) {
         teamRepository.findById(id).ifPresent(
                 team -> {
-                    team.setEvents(selectedEvent);
+                    team.setEvents((selectedEvent));
                 }
         );
 
 
     }
-
 //    public Event getTeamWithEvent(int id) {
 //        return teamRepository.findById(id).map(Team::getEvents).orElse(null);
 //    }

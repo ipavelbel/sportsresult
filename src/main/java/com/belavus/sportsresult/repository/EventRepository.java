@@ -13,6 +13,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
     Event findEventById(Integer id);
 
+
 //    List<Event> findEventByTeamsId(int id);
 //
 //    // TODO n.kvetko: Sections of code should not be commented out. Programmers should not comment out code as it bloats programs and reduces readability.

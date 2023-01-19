@@ -4,11 +4,15 @@ package com.belavus.sportsresult.controller;
 // TODO: n.kvetko: don't forget about code formatting (ctrl + alt + L --- być może, ale nie pamiętam)
 
 import com.belavus.sportsresult.model.Athlete;
+import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.service.AthleteService;
+import com.belavus.sportsresult.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @Controller
 @RequestMapping("/athletes")
@@ -16,10 +20,12 @@ public class AthleteController {
 
     public static final String redirectToAthletes = "redirect:/athletes";
     private final AthleteService athleteService;
+    private final TeamService teamService;
 
     @Autowired // TODO: n.kvetko: unnecessary annotation
-    public AthleteController(AthleteService athleteService) {
+    public AthleteController(AthleteService athleteService, TeamService teamService) {
         this.athleteService = athleteService;
+        this.teamService = teamService;
     }
 
     @GetMapping("")
@@ -56,4 +62,32 @@ public class AthleteController {
         athleteService.deleteById(id);
         return redirectToAthletes;
     }
+
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("team") Team team) {
+        model.addAttribute("athlete", athleteService.findOne(id));
+
+        Set<Team> athleteInTeam = athleteService.getTeamsByAthleteId(id);
+
+        if (!athleteInTeam.isEmpty()) {
+            model.addAttribute("oneTeams", athleteInTeam);
+        } else
+            model.addAttribute("teams", teamService.findAll());
+
+        return "athlete/showAthlete";
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("teamId") Team selectedTeam) {
+
+        athleteService.assign(id, selectedTeam);
+        return "redirect:/athletes/" + id;
+    }
+
+//    @PatchMapping("/{id}/release")
+//    public String releaseAthleteFromTeam(@PathVariable("id") int id) {
+//        athleteService.release(id);
+//        return "redirect:/athletes/" + id;
+//    }
 }
+

@@ -21,7 +21,7 @@
             <tbody>
             <tr th:each="athlete:${athletes}">
                 <td th:text="${athlete.id}"></td>
-                <td th:text="${athlete.name}"></td>
+                <td> <a th:href="@{/athletes/{id}(id=${athlete.id})}"th:text="${athlete.name}"></a></td>
                 <td th:text="${athlete.surname}"></td>
                 <td th:text="${athlete.age}"></td>
                 <td><form th:method="GET" th:action="@{/athletes/{id}/edit(id=${athlete.id})}">

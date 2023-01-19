@@ -37,7 +37,7 @@ public class EventsController {
 
 
     @GetMapping("/new")
-    public String createEventForm(@ModelAttribute ("event") Event event) { // TODO: n.kvetko: unused parameters
+    public String createEventForm(@ModelAttribute("event") Event event) { // TODO: n.kvetko: unused parameters
         return "event/event-create";
     }
 
@@ -73,39 +73,5 @@ public class EventsController {
 
         return "event/show";
     }
-
-
-
-//        @GetMapping("/{id}/teams")
-//    public String findAllTeamsByEventId( @PathVariable(value = "id") int id, Model model){
-////            List<Team> teams = new ArrayList<Team>();
-////            teams.addAll(event.getTeams());
-//            List<Team> teams = teamService.getTeamsByEventId(id);
-////            model.addAttribute("teams",teams.addAll(event.getTeams()));
-////            List<Team> teams = teamService.();
-//
-//            model.addAttribute("teams", teams);
-//        return "team/team-list";
-//    }
-
-    //    @PostMapping("/event/{id}") // TODO: n.kvetko: Sections of code should not be commented out. Programmers should not comment out code as it bloats programs and reduces readability.
-//    public String showEventId(@PathVariable("id") Integer id, Model model){
-//        Event event = eventService.findById(id);
-//        model.addAttribute("event", event);
-//        return "team/team-list";
-//    }
-//    @GetMapping("/event/{id}")
-//    public String showTeams(@PathVariable("id") Integer id, Model model) { // TODO: n.kvetko: unused parameters
-//
-//
-//        return "team/team-list";
-//    }
-
-//    @GetMapping("event/{id}/teams") // TODO: n.kvetko: Sections of code should not be commented out. Programmers should not comment out code as it bloats programs and reduces readability.
-//    public String getTeamsByEventId(@PathVariable("id") Integer id, Model model){
-//      List<Team> teams = eventService.getTeamsByEventId(id);
-//      model.addAttribute("teams",teams);
-//        return "redirect:/team-list";
-//    }
 
 }

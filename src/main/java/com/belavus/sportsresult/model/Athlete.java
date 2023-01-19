@@ -1,10 +1,17 @@
 package com.belavus.sportsresult.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
+import org.hibernate.Hibernate;
+
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
-//@Data // TODO: n.kvetko: ???
+//@Data //
 @Entity
 @Table(name = "athletes")
 public class Athlete {
@@ -22,9 +29,19 @@ public class Athlete {
     @Column(name = "age")
     private int age;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "id") // TODO: n.kvetko: perform code formatting
-    private Team oneTeam;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "teams_athletes",
+            joinColumns = @JoinColumn(name = "athletes_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
+    private Set<Team> teams = new LinkedHashSet<>();
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
 
     public Athlete() {
     }
@@ -67,22 +84,28 @@ public class Athlete {
         this.age = age;
     }
 
-    public Team getOneTeam() {
-        return oneTeam;
+
+    public void addTeam(Team team) {
+        teams.add(team);
+        team.getAthletes().add(this);
     }
 
-    public void setOneTeam(Team oneTeam) {
-        this.oneTeam = oneTeam;
+    public void removeTeam(Team team) {
+        teams.remove(team);
+        team.setAthletes(null);
     }
 
     @Override
-    public String toString() {
-        return "Athlete{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", oneTeam=" + oneTeam +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof Athlete )) return false;
+        Athlete athlete = (Athlete) o;
+        return  Objects.equals(id, athlete.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

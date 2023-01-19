@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EventService { // TODO: n.kvetko: perform code formatting
@@ -28,21 +25,16 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         this.peopleRepository = peopleRepository;
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    public Event findById(int id){
-//        return eventRepository.getOne(id); // TODO: n.kvetko: getOne is deprecated(!) Use getById(ID) instead.
-//    }
 
     public List<Event> findAll(){
         return eventRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void save(Event event){ // TODO: n.kvetko: Return value of the method is never used
          eventRepository.save(event);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(int id){
         eventRepository.deleteById(id);
     }
@@ -56,7 +48,7 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         return eventRepository.findEventById(id);
     }
 
-    public List<Team> getTeamsByEventId(Integer id){ // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
+    public Set<Team> getTeamsByEventId(Integer id){ // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
         Optional<Event> event = eventRepository.findById(id);
         if(event.isPresent()){
             Hibernate.initialize(event.get().getTeams());
@@ -64,7 +56,7 @@ public class EventService { // TODO: n.kvetko: perform code formatting
             return event.get().getTeams();
         }
         else {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
     }
 

@@ -22,7 +22,6 @@
                 <td th:text="${team.id}"></td>
                 <td><a th:href="@{/teams/{id}(id=${team.id})}" th:text="${team.name}"></a></td>
                 <td th:text="${team.coach}"></td>
-
                 <td><form th:method="GET" th:action="@{/teams/{teamId}/edit(teamId=${team.id})}">
                     <input type="submit" value="Edit"/></form></td>
                 <!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
