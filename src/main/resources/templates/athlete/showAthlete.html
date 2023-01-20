@@ -10,7 +10,7 @@
 <p th:text="${athlete.getName() + ', ' + athlete.getSurname() + ', ' + athlete.getAge()}">VALUE</p>
 
 <div th:if="${teams}">
-    <span>this athlete without team, you can add team!</span>
+    <span>you can add team in athlete!</span>
     <form th:method="PATCH" th:action="@{/athletes/{id}/assign(id=${athlete.getId()})}">
         <label for="team">Choose team</label>
         <select th:object="${team}" th:field="*{id}" id="team">
@@ -21,7 +21,11 @@
     </form>
 </div>
 
-<div th:if="${oneTeams}">
+<div th:if="${oneTeams.isEmpty()}">
+    <p>Athlete without team </p>
+    <hr/>
+</div>
+<div th:if="${!oneTeams.isEmpty()}">
     <hr/>
     <b>Teams:</b>
     <br/>
@@ -31,6 +35,11 @@
                 <span>Athlete now in: </span><span th:text="${oneTeam.getName() + ', ' + oneTeam.getCoach()}">
                 </span>
             </td>
+            <td>
+                <form th:method="PATCH" th:action="@{/athletes/{id}/{teamId}/release(id=${athlete.getId()},teamId=${oneTeam.getId()})}">
+                    <input type="submit" value="Delete team"/>
+                </form>
+            </td>
         </tr>
     </table>
     <hr/>
@@ -39,9 +48,7 @@
 <!--<div th:if="${oneTeam}">-->
 <!--    <span>Athlete now in: </span> <span th:text="${oneTeam.g}">Team Name</span>-->
 
-<!--    <form th:method="PATCH" th:action="@{/athletes/{id}/release(id=${athlete.getId()})}">-->
-<!--        <input type="submit" value="Delete athlete from team"/>-->
-<!--    </form>-->
+
 <!--</div>-->
 
 

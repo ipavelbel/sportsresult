@@ -22,6 +22,8 @@ class AthleteRepositoryTest {
     AthleteRepository athleteRepository;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private EventRepository eventRepository;
 
     @Test
     public void testAddAthleteInTeam() {
@@ -46,10 +48,44 @@ class AthleteRepositoryTest {
         athleteRepository.save(athlete);
         athleteRepository.save(athlete2);
 
+    }
 
+    @Test
+    public void testAddAthleteInTeamId() {
+
+        Athlete athlete = new Athlete("nnnn", "ksjdfl", 44);
+        Optional<Team> team = teamRepository.findById(5);
+//        if (team.isPresent()) {
+//            Team teamN = team.get();
+//        }
+//            athlete.setTeams(new LinkedHashSet<>(Collections.singletonList(team)));
+//
+//            team.stream().map();
 
     }
 
+
+    @Test
+    void testRemoveTeamFromAthlete() {
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(9).orElseThrow();
+        Team team = athlete.getTeams().stream()
+                .filter(team1 -> team1.getId() == 27 )
+                .findFirst().orElseThrow();
+        athlete.removeTeam(team);
+        athleteRepository.save(athlete);
+
+//        Collections<Team> teams = athleteRepository.findAthleteWithTeamById(9).orElseThrow().getTeams();
+//        Optional<Team> deletedTeam = teams.stream
+    }
+
+    @Test
+    void testAddTeamToAthlete() {
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(9).orElseThrow();
+        Team team = teamRepository.findById(26).orElseThrow();
+        athlete.addTeam(team);
+        athleteRepository.save(athlete);
+
+    }
 
 
 }

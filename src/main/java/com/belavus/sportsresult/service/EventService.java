@@ -26,16 +26,16 @@ public class EventService { // TODO: n.kvetko: perform code formatting
     }
 
 
-    public List<Event> findAll(){
+    public List<Event> findAll() {
         return eventRepository.findAll();
     }
 
-    public void save(Event event){ // TODO: n.kvetko: Return value of the method is never used
-         eventRepository.save(event);
+    public void save(Event event) { // TODO: n.kvetko: Return value of the method is never used
+        eventRepository.save(event);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteById(int id){
+    //    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void deleteById(int id) {
         eventRepository.deleteById(id);
     }
 
@@ -48,14 +48,13 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         return eventRepository.findEventById(id);
     }
 
-    public Set<Team> getTeamsByEventId(Integer id){ // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
+    public Set<Team> getTeamsByEventId(Integer id) { // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
         Optional<Event> event = eventRepository.findById(id);
-        if(event.isPresent()){
+        if (event.isPresent()) {
             Hibernate.initialize(event.get().getTeams());
 
             return event.get().getTeams();
-        }
-        else {
+        } else {
             return Collections.emptySet();
         }
     }

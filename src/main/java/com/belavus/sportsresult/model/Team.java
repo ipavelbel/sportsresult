@@ -2,7 +2,6 @@ package com.belavus.sportsresult.model;
 
 import javax.persistence.*;
 
-import lombok.Data;
 
 import java.util.*;
 
@@ -36,7 +35,7 @@ public class Team {
     @JoinTable(name = "events_teams",
             joinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
-    private Set<Event> events = new LinkedHashSet<>();
+    private Set<Event> events = new HashSet<>();
 
     public void setAthletes(Set<Athlete> athletes) {
         this.athletes = athletes;
@@ -54,6 +53,13 @@ public class Team {
 
         this.name = name;
         this.coach = coach;
+    }
+
+    public Team(int id, String name, String coach, Set<Athlete> athletes) {
+        this.id = id;
+        this.name = name;
+        this.coach = coach;
+        this.athletes = athletes;
     }
 
     public int getId() {

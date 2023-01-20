@@ -44,6 +44,7 @@ public class AuthController {
                                                                      // TODO: n.kvetko line length is usually 120,but it depends on the project
         personValidator.validate(person, bindingResult);
 
+
         if (bindingResult.hasErrors()) // TODO: n.kvetko add braces to "if" statement
             return "/welcome/registration";
 

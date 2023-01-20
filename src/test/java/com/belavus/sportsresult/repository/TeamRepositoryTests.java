@@ -66,6 +66,7 @@ public class TeamRepositoryTests {
         team2.getEvents().add(event);
         team3.getEvents().add(event2);
 
+
         eventRepository.save(event);
         eventRepository.save(event2);
     }

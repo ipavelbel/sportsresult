@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 
-//@Data //
+
 @Entity
 @Table(name = "athletes")
 public class Athlete {

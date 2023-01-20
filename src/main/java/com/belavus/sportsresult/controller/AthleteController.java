@@ -69,9 +69,9 @@ public class AthleteController {
 
         Set<Team> athleteInTeam = athleteService.getTeamsByAthleteId(id);
 
-        if (!athleteInTeam.isEmpty()) {
+//        if (!athleteInTeam.isEmpty()) {
             model.addAttribute("oneTeams", athleteInTeam);
-        } else
+//        } else
             model.addAttribute("teams", teamService.findAll());
 
         return "athlete/showAthlete";
@@ -84,10 +84,10 @@ public class AthleteController {
         return "redirect:/athletes/" + id;
     }
 
-//    @PatchMapping("/{id}/release")
-//    public String releaseAthleteFromTeam(@PathVariable("id") int id) {
-//        athleteService.release(id);
-//        return "redirect:/athletes/" + id;
-//    }
+    @PatchMapping("/{id}//{teamId}/release")
+    public String releaseAthleteFromTeam(@PathVariable("id") int id, @PathVariable("teamId") int teamId) {
+        athleteService.release(id, teamId);
+        return "redirect:/athletes/" + id;
+    }
 }
 

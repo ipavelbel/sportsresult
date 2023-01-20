@@ -2,7 +2,6 @@ package com.belavus.sportsresult.service;
 
 
 import com.belavus.sportsresult.model.Athlete;
-import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
@@ -67,19 +66,15 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
         }
     }
 
-//    public Set<Team> getAthleteInEvent(int id) {
-//        return teamRepository.findById(id).map(Team::getAthletes).orElse(null);
-//    }
-
-
-
     public void assign(int id, Team selectedTeam) {
-        athleteRepository.findById(id).ifPresent(
-                athlete -> {
-                    athlete.setTeams(Collections.singleton((selectedTeam)));
-                });
+        int teamId = selectedTeam.getId();
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        athlete.addTeam(team);
+        athleteRepository.save(athlete);
     }
-//
+
+    //
     public Set<Athlete> getAthleteByTeamId(int id) {
         Optional<Team> team = teamRepository.findById(id);
         if (team.isPresent()) {
@@ -89,13 +84,20 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
             return Collections.emptySet();
         }
     }
+
+    public void release(int id, int teamId) {
+
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
+        Team team = athlete.getTeams().stream()
+                .filter(team1 -> team1.getId() == teamId)
+                .findFirst().orElseThrow();
+        athlete.removeTeam(team);
+        athleteRepository.save(athlete);
+    }
 }
-//
-//    public void release(int id) {
-//        athleteRepository.findById(id).ifPresent(
-//                athlete -> athlete.setOneTeam(null)
-//        );
-//    }
+
+
+
 
 
 

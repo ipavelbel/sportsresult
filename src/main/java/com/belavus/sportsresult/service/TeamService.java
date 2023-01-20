@@ -1,14 +1,13 @@
 package com.belavus.sportsresult.service;
 
 
-
 import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -24,15 +23,15 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
     }
 
 
-    public List<Team> findAll(){
+    public List<Team> findAll() {
         return teamRepository.findAll();
     }
 
-    public void save(Team team){
+    public void save(Team team) {
         teamRepository.save(team); // TODO: n.kvetko: Return value of the method is never used
     }
 
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         teamRepository.deleteById(id);
     }
 
@@ -57,9 +56,7 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
 
     public void assign(int id, Set<Event> selectedEvent) {
         teamRepository.findById(id).ifPresent(
-                team -> {
-                    team.setEvents((selectedEvent));
-                }
+                team -> team.setEvents((selectedEvent))
         );
 
 
