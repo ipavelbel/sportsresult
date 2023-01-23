@@ -74,8 +74,8 @@ class AthleteRepositoryTest {
         athlete.removeTeam(team);
         athleteRepository.save(athlete);
 
-//        Collections<Team> teams = athleteRepository.findAthleteWithTeamById(9).orElseThrow().getTeams();
-//        Optional<Team> deletedTeam = teams.stream
+//        Collections<Team> teamsInEvent = athleteRepository.findAthleteWithTeamById(9).orElseThrow().getTeams();
+//        Optional<Team> deletedTeam = teamsInEvent.stream
     }
 
     @Test

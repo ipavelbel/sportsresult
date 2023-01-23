@@ -11,7 +11,6 @@ import java.util.Objects;
 import java.util.Set;
 
 
-
 @Entity
 @Table(name = "athletes")
 public class Athlete {
@@ -35,13 +34,8 @@ public class Athlete {
             inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
     private Set<Team> teams = new LinkedHashSet<>();
 
-    public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
-    }
+    @ManyToMany(mappedBy = "athletes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Event> events = new LinkedHashSet<>();
 
     public Athlete() {
     }
@@ -84,6 +78,21 @@ public class Athlete {
         this.age = age;
     }
 
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
 
     public void addTeam(Team team) {
         teams.add(team);
@@ -99,9 +108,9 @@ public class Athlete {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Athlete )) return false;
+        if (!(o instanceof Athlete)) return false;
         Athlete athlete = (Athlete) o;
-        return  Objects.equals(id, athlete.id);
+        return Objects.equals(id, athlete.id);
     }
 
     @Override

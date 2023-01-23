@@ -51,8 +51,8 @@ public class GeneralController {
 //
 //    @GetMapping("")
 //    public String findAllTeamsByEventId(@PathVariable(value = "id") int id, Model model) {
-//        List<Team> teams = teamService.getTeamsByEventId(id);
-//        model.addAttribute("teams", teams);
+//        List<Team> teamsInEvent = teamService.getTeamsByEventId(id);
+//        model.addAttribute("teamsInEvent", teamsInEvent);
 ////        Event eventWithId = teamService.getTeamWithEvent(id);
 ////        model.addAttribute("events", eventWithId);
 //        return "team/team-list";

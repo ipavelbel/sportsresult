@@ -1,13 +1,17 @@
 package com.belavus.sportsresult.service;
 
 
+import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team;
+import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -16,10 +20,12 @@ import java.util.Set;
 public class TeamService { // TODO: n.kvetko: perform code formatting
 
     private final TeamRepository teamRepository;
+    private final AthleteRepository athleteRepository;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, AthleteRepository athleteRepository) {
         this.teamRepository = teamRepository;
+        this.athleteRepository = athleteRepository;
     }
 
 
@@ -54,14 +60,26 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
         return teamRepository.findById(id).map(Team::getEvents).orElse(null);
     }
 
-    public void assign(int id, Set<Event> selectedEvent) {
-        teamRepository.findById(id).ifPresent(
-                team -> team.setEvents((selectedEvent))
-        );
-
+    public void assign(int id, Athlete selectedAthlete) {
+        int athleteId = selectedAthlete.getId();
+        Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow();
+        Athlete athlete = athleteRepository.findById(athleteId).orElseThrow();
+        team.addAthletes(athlete);
+        teamRepository.save(team);
 
     }
+
+    public Set<Athlete> getAthletesByTeamId(int id) {
+        Optional<Team> team = teamRepository.findById(id);
+        if (team.isPresent()) {
+            Hibernate.initialize(team.get().getAthletes());
+            return team.get().getAthletes();
+        } else {
+            return Collections.emptySet();
+        }
+    }
+}
 //    public Event getTeamWithEvent(int id) {
 //        return teamRepository.findById(id).map(Team::getEvents).orElse(null);
 //    }
-}
+

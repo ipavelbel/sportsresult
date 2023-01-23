@@ -12,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
-
 @Controller
 @RequestMapping("/athletes")
 public class AthleteController {
@@ -65,14 +63,12 @@ public class AthleteController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("team") Team team) {
+
         model.addAttribute("athlete", athleteService.findOne(id));
-
-        Set<Team> athleteInTeam = athleteService.getTeamsByAthleteId(id);
-
 //        if (!athleteInTeam.isEmpty()) {
-            model.addAttribute("oneTeams", athleteInTeam);
+        model.addAttribute("teamsInAthlete", athleteService.getTeamsByAthleteId(id));
 //        } else
-            model.addAttribute("teams", teamService.findAll());
+        model.addAttribute("teams", teamService.findAll());
 
         return "athlete/showAthlete";
     }
@@ -80,7 +76,7 @@ public class AthleteController {
     @PatchMapping("/{id}/assign")
     public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("teamId") Team selectedTeam) {
 
-        athleteService.assign(id, selectedTeam);
+        athleteService.assignAthlete(id, selectedTeam);
         return "redirect:/athletes/" + id;
     }
 

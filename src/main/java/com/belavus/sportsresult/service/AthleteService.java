@@ -51,14 +51,10 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
     }
 
     public Set<Team> getTeamsByAthleteId(int id) {
-
         Optional<Athlete> athlete = athleteRepository.findById(id);
-
         if (athlete.isPresent()) {
             Hibernate.initialize(athlete.get().getTeams());
-
 ////        athleteRepository.findAllById(team);
-
 //        Set teamSet = athleteRepository.findById(id).map(Athlete::getTeams).orElse(null);
             return athlete.get().getTeams();
         } else {
@@ -66,7 +62,7 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
         }
     }
 
-    public void assign(int id, Team selectedTeam) {
+    public void assignAthlete(int id, Team selectedTeam) {
         int teamId = selectedTeam.getId();
         Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
         Team team = teamRepository.findById(teamId).orElseThrow();
@@ -86,7 +82,6 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
     }
 
     public void release(int id, int teamId) {
-
         Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
         Team team = athlete.getTeams().stream()
                 .filter(team1 -> team1.getId() == teamId)

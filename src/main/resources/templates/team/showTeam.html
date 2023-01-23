@@ -11,20 +11,20 @@
 
 
 
-<div th:if="${events}">
-    <span>this team without event, you can add event</span>
-    <form th:method="PATCH" th:action="@{/teams/{id}/assign(id=${event.getId()})}">
-        <label for="event">Choose event</label>
-        <select th:object="${event}" th:field="*{id}" id="event">
-            <option th:each="event : ${events}" th:value="${event.getId()}" th:text="${event.getName()}">
-            </option>
-        </select>
-        <input type="submit" value="submit"/>
-    </form>
-</div>
+<!--<div th:if="${events}">-->
+<!--    <span>this team without event, you can add event</span>-->
+<!--    <form th:method="PATCH" th:action="@{/teams/{id}/assign(id=${event.getId()})}">-->
+<!--        <label for="event">Choose event</label>-->
+<!--        <select th:object="${event}" th:field="*{id}" id="event">-->
+<!--            <option th:each="event : ${events}" th:value="${event.getId()}" th:text="${event.getName()}">-->
+<!--            </option>-->
+<!--        </select>-->
+<!--        <input type="submit" value="submit"/>-->
+<!--    </form>-->
+<!--</div>-->
+<!--<hr/>-->
 <hr/>
 <div th:if="${teamsInEvent}">
-    <hr/>
     <table th:each="teamInEvent : ${teamsInEvent}">
         <tr>
             <td>
@@ -33,26 +33,28 @@
             </td>
         </tr>
     </table>
-
-<!--    <b>Teams:</b>-->
-<!--    <br/>-->
-<!--    <span>Team in Event: </span> <span th:text="${teamInEvent.}">Person Name</span>-->
-
-<!--    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">-->
-<!--        <input type="submit" value="Освободить книгу"/>-->
-<!--    </form>-->
+</div>
+<hr/>
+<div th:if="${athletes}">
+    <span>You can add athlete in team!</span>
+    <form th:method="PATCH" th:action="@{/teams/{id}/assignTeam(id=${team.getId()})}">
+        <label for="athlete">Choose athlete</label>
+        <select th:object="${athlete}" th:field="*{id}" id="athlete">
+            <option th:each="athlete : ${athletes}" th:value="${athlete.getId()}" th:text="${athlete.getName()} + ', ' + ${athlete.getSurname()} " >
+            </option>
+        </select>
+        <input type="submit" value="submit"/>
+    </form>
 </div>
 
-<div th:if="${athletes.isEmpty()}">
+<div th:if="${athletesInTeams.isEmpty()}">
     <p>In team no athlete</p>
-    <hr/>
 </div>
 
-<div th:if="${!athletes.isEmpty()}">
-    <hr/>
+<div th:if="${!athletesInTeams.isEmpty()}">
     <b>Athletes:</b>
     <br/>
-    <table th:each="athete : ${athletes}">
+    <table th:each="athete : ${athletesInTeams}">
         <tr>
             <td>
                 <span th:text="${athete.getName() + ', ' + athete.getSurname()}">
@@ -62,7 +64,9 @@
     </table>
     <hr/>
 </div>
-
+</div>
+<p><a href="/teams">Back</a></p>
+</div>
 <!--<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">-->
 <!--    <input type="submit" value="Редактировать"/>-->
 <!--</form>-->

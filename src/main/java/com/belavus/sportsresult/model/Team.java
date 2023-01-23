@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.*;
 
 
-
 @Entity
 @Table(name = "teams")
 public class Team {
@@ -21,35 +20,16 @@ public class Team {
     @Column(name = "coach")
     private String coach;
 
-//    @ManyToMany(fetch = FetchType.LAZY,
-//            cascade = {
-//                    CascadeType.PERSIST,
-//                    CascadeType.MERGE},
-//            mappedBy = "teams")
-//    private Set<Event> events = new HashSet<Event>();
-
     @ManyToMany(mappedBy = "teams", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Athlete> athletes = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "events_teams",
-            joinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"))
-    private Set<Event> events = new HashSet<>();
-
-    public void setAthletes(Set<Athlete> athletes) {
-        this.athletes = athletes;
-    }
-
-    public Set<Athlete> getAthletes() {
-        return athletes;
-    }
-
+    @ManyToMany(mappedBy = "teams", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Event> events = new LinkedHashSet<>();
 
     public Team() {
     }
 
-    public Team( String name, String coach) {
+    public Team(String name, String coach) {
 
         this.name = name;
         this.coach = coach;
@@ -94,6 +74,14 @@ public class Team {
         this.events = events;
     }
 
+    public void setAthletes(Set<Athlete> athletes) {
+        this.athletes = athletes;
+    }
+
+    public Set<Athlete> getAthletes() {
+        return athletes;
+    }
+
     public void addEvents(Event eventsID) {
         events.add(eventsID);
         eventsID.getTeams().add(this);
@@ -104,7 +92,7 @@ public class Team {
         eventsID.getTeams().remove(this);
     }
 
-    public void addSomeAthletes(Athlete athlete) {
+    public void addAthletes(Athlete athlete) {
         athletes.add(athlete);
         athlete.getTeams().add(this);
     }
@@ -126,27 +114,8 @@ public class Team {
     public int hashCode() {
         return Objects.hash(id);
     }
-    //    public Set<Event> getEvents() {
-//        return events;
-//    }
-//
-//    public void setEvents(Set<Event> events) {
-//        this.events = events;
-//    }
-
-//    public List<Athlete> getSomeAthletes() {
-//        return someAthletes;
-//    }
-//
-//    public void setSomeAthletes(List<Athlete> someAthletes) {
-//        this.someAthletes = someAthletes;
-//    }
-
-
-
 
 }
-
 
 
 // TODO: n.kvetko: should be eventId (don't forget to change this as well where it is used)

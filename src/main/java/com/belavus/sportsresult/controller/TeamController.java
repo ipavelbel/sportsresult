@@ -1,6 +1,7 @@
 package com.belavus.sportsresult.controller;
 
 
+import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team;
 
@@ -71,24 +72,25 @@ public class TeamController {
 
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("event") Event event) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete) {
         model.addAttribute("team", teamService.findOne(id));
 
         Set<Event> teamsInEvent = teamService.getTeamInEvent(id);
 
-        if (!teamsInEvent.isEmpty())
+//        if (!teamsInEvent.isEmpty())
             model.addAttribute("teamsInEvent", teamsInEvent);
-        else
+//        else
             model.addAttribute("events", eventService.findAll());
-            model.addAttribute("athletes", athleteService.getAthleteByTeamId(id));
+            model.addAttribute("athletes", athleteService.findAll());
+            model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
 
         return "team/showTeam";
     }
 
-    @PatchMapping("/{id}/assign")
-    public String addTeamToEvent(@PathVariable("id") int id, @ModelAttribute("event") Set<Event> selectedEvent) {
+    @PatchMapping("/{id}/assignTeam")
+    public String addTeamToEvent(@PathVariable("id") int id, @ModelAttribute("athlete") Athlete selectedAthlete) {
 
-        teamService.assign(id, selectedEvent);
+        teamService.assign(id, selectedAthlete);
         return redirectToTeams + id;
     }
 

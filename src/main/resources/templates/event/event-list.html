@@ -21,7 +21,7 @@
             <tr th:each="event : ${events}">
                 <td th:text="${event.id}"></td>
                 <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.name}"></a></td>
-<!--                <td><a th:href="@{events/{id}/teams(id=${event.id})}" th:text="${event.name}"></a></td>-->
+<!--                <td><a th:href="@{events/{id}/teamsInEvent(id=${event.id})}" th:text="${event.name}"></a></td>-->
                 <td th:text="${event.place}"></td>
 <!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
                 <td><form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
@@ -33,7 +33,8 @@
             </tbody>
         </table>
     </div>
-    <p><a href="/events/new">Create event</a></p>
+    <p><a href="/events/new">Create event</a> </p>
+    <p><a href="/first">Back</a></p>
 </div>
 </body>
 </html>

@@ -1,13 +1,15 @@
 package com.belavus.sportsresult.service;
 
 
+import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team; // TODO: n.kvetko: unused import
+import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.EventRepository;
 import com.belavus.sportsresult.repository.PeopleRepository;
+import com.belavus.sportsresult.repository.TeamRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,12 +19,17 @@ public class EventService { // TODO: n.kvetko: perform code formatting
 
     private final EventRepository eventRepository;
     private final PeopleRepository peopleRepository;
+    private final AthleteRepository athleteRepository;
+    private final TeamRepository teamRepository;
 
     @Autowired // TODO: n.kvetko: unnecessary annotation
     public EventService(EventRepository eventRepository,
-                        PeopleRepository peopleRepository) {
+                        PeopleRepository peopleRepository,
+                        AthleteRepository athleteRepository, TeamRepository teamRepository) {
         this.eventRepository = eventRepository;
         this.peopleRepository = peopleRepository;
+        this.athleteRepository = athleteRepository;
+        this.teamRepository = teamRepository;
     }
 
 
@@ -44,8 +51,8 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         return foundEvent.orElse(null);
     }
 
-    public Event getEventWithId(int id) {
-        return eventRepository.findEventById(id);
+    public Optional<Event> getEventWithAthletes(int id) {
+        return eventRepository.findEventWithAthletesById(id);
     }
 
     public Set<Team> getTeamsByEventId(Integer id) { // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
@@ -64,4 +71,48 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         eventRepository.save(updateEvent);
     }
 
+    public void assignAthlete(int id, Athlete selectedAthlete) {
+        int athleteId = selectedAthlete.getId();
+        Event event = eventRepository.findEventWithAthletesById(id).orElseThrow();
+        Athlete athlete = athleteRepository.findById(athleteId).orElseThrow();
+        event.addAthlete(athlete);
+        eventRepository.save(event);
+    }
+
+    public Set<Athlete> getAthletesByEventId(int id) {
+        Optional<Event> event = eventRepository.findById(id);
+        if (event.isPresent()) {
+            Hibernate.initialize((event.get().getAthletes()));
+            return event.get().getAthletes();
+        } else {
+            return Collections.emptySet();
+        }
+
+    }
+
+    public void releaseAthlete(int id, int athleteId) {
+        Event event = eventRepository.findEventWithAthletesById(id).orElseThrow();
+        Athlete athlete = event.getAthletes().stream()
+                .filter(athlete1 -> athlete1.getId() == athleteId)
+                .findFirst().orElseThrow();
+        event.removeAthlete(athlete);
+        eventRepository.save(event);
+    }
+
+    public void assignTeam(int id, Team selectedTeam) {
+        int teamId = selectedTeam.getId();
+        Event event = eventRepository.findEventWithTeamsById(id).orElseThrow();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        event.addTeam(team);
+        eventRepository.save(event);
+    }
+
+    public void releaseTeam(int id, int teamId) {
+        Event event = eventRepository.findEventWithTeamsById(id).orElseThrow();
+        Team team = event.getTeams().stream()
+                .filter(team1 -> team1.getId() == teamId)
+                .findFirst().orElseThrow();
+        event.removeTeam(team);
+        eventRepository.save(event);
+    }
 }
