@@ -15,12 +15,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class AthleteService { // TODO: n.kvetko: perform code formatting
+public class AthleteService { // TODO: perform code formatting
 
     private final AthleteRepository athleteRepository;
     private final TeamRepository teamRepository;
 
-    @Autowired // TODO: n.kvetko: unnecessary annotation
     public AthleteService(AthleteRepository athleteRepository,
                           TeamRepository teamRepository) {
         this.athleteRepository = athleteRepository;
@@ -46,8 +45,14 @@ public class AthleteService { // TODO: n.kvetko: perform code formatting
     }
 
     public void update(int id, Athlete updateAthlete) {
-        updateAthlete.setId(id);
-        athleteRepository.save(updateAthlete);
+        String athleteName = updateAthlete.getName();
+        String athleteSurname = updateAthlete.getSurname();
+        int athleteAge = updateAthlete.getAge();
+        Athlete athlete = athleteRepository.findById(id).orElseThrow();
+        athlete.setName(athleteName);
+        athlete.setSurname(athleteSurname);
+        athlete.setAge(athleteAge);
+        athleteRepository.save(athlete);
     }
 
     public Set<Team> getTeamsByAthleteId(int id) {

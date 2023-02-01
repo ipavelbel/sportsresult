@@ -29,6 +29,12 @@ public class Team {
     public Team() {
     }
 
+    public Team(int id, String name, String coach) {
+        this.id = id;
+        this.name = name;
+        this.coach = coach;
+    }
+
     public Team(String name, String coach) {
 
         this.name = name;

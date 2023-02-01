@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class TeamService { // TODO: n.kvetko: perform code formatting
+public class TeamService { // TODO:  perform code formatting
 
     private final TeamRepository teamRepository;
     private final AthleteRepository athleteRepository;
@@ -34,7 +34,7 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
     }
 
     public void save(Team team) {
-        teamRepository.save(team); // TODO: n.kvetko: Return value of the method is never used
+        teamRepository.save(team); // TODO: Return value of the method is never used
     }
 
     public void deleteById(Integer id) {
@@ -52,8 +52,12 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
     }
 
     public void update(int teamId, Team updateTeam) {
-        updateTeam.setId(teamId);
-        teamRepository.save(updateTeam);
+        String teamName = updateTeam.getName();
+        String teamCoach = updateTeam.getCoach();
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        team.setName(teamName);
+        team.setCoach(teamCoach);
+        teamRepository.save(team);
     }
 
     public Set<Event> getTeamInEvent(int id) {
@@ -79,7 +83,5 @@ public class TeamService { // TODO: n.kvetko: perform code formatting
         }
     }
 }
-//    public Event getTeamWithEvent(int id) {
-//        return teamRepository.findById(id).map(Team::getEvents).orElse(null);
-//    }
+
 

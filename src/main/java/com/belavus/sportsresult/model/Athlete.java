@@ -3,8 +3,8 @@ package com.belavus.sportsresult.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
-import org.hibernate.Hibernate;
+//import lombok.Data;
+//import org.hibernate.Hibernate;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -38,6 +38,13 @@ public class Athlete {
     private Set<Event> events = new LinkedHashSet<>();
 
     public Athlete() {
+    }
+
+    public Athlete(int id, String name, String surname, int age) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
     }
 
     public Athlete(String name, String surname, int age) {

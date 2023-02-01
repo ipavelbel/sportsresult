@@ -13,7 +13,6 @@ public class RegistrationService {  // TODO: n.kvetko: code formatting
     private final PeopleRepository peopleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired // TODO: n.kvetko unnecessary annotation
     public RegistrationService(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
         this.peopleRepository = peopleRepository;
         this.passwordEncoder = passwordEncoder;

@@ -9,8 +9,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class PersonValidator implements Validator { // TODO: n.kvetko: validates that the user does not exist? If so,
-    // TODO: n.kvetko: then name the class accordingly
+public class PersonValidator implements Validator { // TODO:  validates that the user does not exist? If so,
+    // TODO:then name the class accordingly
 
     private final PersonDetailsService personDetailsService;
 

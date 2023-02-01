@@ -24,7 +24,11 @@
 <!--</div>-->
 <!--<hr/>-->
 <hr/>
-<div th:if="${teamsInEvent}">
+<div th:if="${teamsInEvent.isEmpty()}">
+    <p>Athlete without team </p>
+    <hr/>
+</div>
+<div th:if="${!teamsInEvent.isEmpty()}">
     <table th:each="teamInEvent : ${teamsInEvent}">
         <tr>
             <td>

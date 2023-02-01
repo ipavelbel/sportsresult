@@ -8,6 +8,7 @@
 <body>
 <p th:text="${event.getName() + ', ' + event.getPlace()}">VALUE</p>
 
+<hr/>
 
 <div th:if="${teams}">
     <span>You can add team in event!</span>
@@ -27,7 +28,6 @@
 </div>
 
 <div th:if="${!teamsInEvent.isEmpty()}">
-    <hr/>
     <b>Teams:</b>
     <br/>
     <table th:each="team : ${teamsInEvent}">

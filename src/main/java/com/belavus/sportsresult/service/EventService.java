@@ -6,28 +6,28 @@ import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team; // TODO: n.kvetko: unused import
 import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.EventRepository;
-import com.belavus.sportsresult.repository.PeopleRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
-public class EventService { // TODO: n.kvetko: perform code formatting
+@Transactional
+public class EventService { // TODO: perform code formatting
 
     private final EventRepository eventRepository;
-    private final PeopleRepository peopleRepository;
     private final AthleteRepository athleteRepository;
     private final TeamRepository teamRepository;
 
-    @Autowired // TODO: n.kvetko: unnecessary annotation
+
     public EventService(EventRepository eventRepository,
-                        PeopleRepository peopleRepository,
-                        AthleteRepository athleteRepository, TeamRepository teamRepository) {
+                        AthleteRepository athleteRepository,
+                        TeamRepository teamRepository) {
         this.eventRepository = eventRepository;
-        this.peopleRepository = peopleRepository;
         this.athleteRepository = athleteRepository;
         this.teamRepository = teamRepository;
     }
@@ -37,8 +37,8 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         return eventRepository.findAll();
     }
 
-    public void save(Event event) { // TODO: n.kvetko: Return value of the method is never used
-        eventRepository.save(event);
+    public Event save(Event event) { // TODO: n.kvetko: Return value of the method is never used
+        return eventRepository.save(event);
     }
 
     //    @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -46,29 +46,21 @@ public class EventService { // TODO: n.kvetko: perform code formatting
         eventRepository.deleteById(id);
     }
 
-    public Event findOne(int id) { // TODO: n.kvetko: Method is never used
-        Optional<Event> foundEvent = eventRepository.findById(id);
-        return foundEvent.orElse(null);
+    public Event findOne(int id) {
+        return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
     }
 
-    public Optional<Event> getEventWithAthletes(int id) {
-        return eventRepository.findEventWithAthletesById(id);
-    }
-
-    public Set<Team> getTeamsByEventId(Integer id) { // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
-        Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            Hibernate.initialize(event.get().getTeams());
-
-            return event.get().getTeams();
-        } else {
-            return Collections.emptySet();
-        }
+    public Set<Team> getTeamsByEventId(Integer id) {
+        Event event = eventRepository.findById(id).orElseThrow();
+        return event.getTeams();
     }
 
     public void update(int id, Event updateEvent) {
-        updateEvent.setId(id);
-        eventRepository.save(updateEvent);
+        Event event = eventRepository.findById(id).orElseThrow();
+        event.setName(updateEvent.getName());
+        event.setPlace(updateEvent.getPlace());
+        eventRepository.save(event);
+
     }
 
     public void assignAthlete(int id, Athlete selectedAthlete) {
@@ -80,14 +72,8 @@ public class EventService { // TODO: n.kvetko: perform code formatting
     }
 
     public Set<Athlete> getAthletesByEventId(int id) {
-        Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            Hibernate.initialize((event.get().getAthletes()));
-            return event.get().getAthletes();
-        } else {
-            return Collections.emptySet();
-        }
-
+        Event event = eventRepository.findById(id).orElseThrow();
+        return event.getAthletes();
     }
 
     public void releaseAthlete(int id, int athleteId) {

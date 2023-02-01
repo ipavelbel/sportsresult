@@ -6,13 +6,13 @@
 </head>
 <body>
 <form action="#" th:action="@{/teams/{teamId}(teamId=${team.getId()})}" th:object="${team}" th:method="PATCH">
-    <label for="id">ID</label>
+    <label for="id">Id</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
     <br/>
-    <label for="name">Title</label>
+    <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name" placeholder="title">
     <br/>
-    <label for="coach">City</label>
+    <label for="coach">Coach</label>
     <input type="text" th:field="*{coach}" id="coach" placeholder="coach">
     <br/>
     <input type="submit" value="Update team">

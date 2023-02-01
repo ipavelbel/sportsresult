@@ -1,5 +1,7 @@
 package com.belavus.sportsresult.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 
 import java.util.*;
@@ -16,22 +18,35 @@ public class Event {
     @Column(name = "place")
     private String place;
 
+//    @Temporal(TemporalType.DATE)
+//    @Column(name = "date_of_event")
+//    @DateTimeFormat(pattern = "dd/MM/yyyy")
+//    private Date dateOfEvent;
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "events_teams",
             joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"))
     private Set<Team> teams = new LinkedHashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "events_athletes",
             joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "athletes_id", referencedColumnName = "id"))
     private Set<Athlete> athletes = new LinkedHashSet<>();
 
+
+
     public Event() {
     }
 
     public Event(String name, String place) {
+        this.name = name;
+        this.place = place;
+    }
+
+    public Event(int id, String name, String place) {
+        this.id = id;
         this.name = name;
         this.place = place;
     }
@@ -75,6 +90,14 @@ public class Event {
     public void setAthletes(Set<Athlete> athletes) {
         this.athletes = athletes;
     }
+
+//    public Date getDateOfEvent() {
+//        return dateOfEvent;
+//    }
+//
+//    public void setDateOfEvent(Date dateOfEvent) {
+//        this.dateOfEvent = dateOfEvent;
+//    }
 
     public void addAthlete(Athlete athlete) {
         athletes.add(athlete);
