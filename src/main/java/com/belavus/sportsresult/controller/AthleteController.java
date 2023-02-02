@@ -20,7 +20,6 @@ public class AthleteController {
     private final AthleteService athleteService;
     private final TeamService teamService;
 
-    @Autowired // TODO: n.kvetko: unnecessary annotation
     public AthleteController(AthleteService athleteService, TeamService teamService) {
         this.athleteService = athleteService;
         this.teamService = teamService;

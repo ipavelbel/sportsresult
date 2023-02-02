@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class AthleteService { // TODO: perform code formatting
     private final AthleteRepository athleteRepository;
     private final TeamRepository teamRepository;
 
+    @Autowired
     public AthleteService(AthleteRepository athleteRepository,
                           TeamRepository teamRepository) {
         this.athleteRepository = athleteRepository;
@@ -41,36 +43,26 @@ public class AthleteService { // TODO: perform code formatting
 
     public Athlete findOne(int id) {
         Optional<Athlete> foundAthlete = athleteRepository.findById(id);
-        return foundAthlete.orElse(null);
+        return foundAthlete.orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
     }
 
     public void update(int id, Athlete updateAthlete) {
-        String athleteName = updateAthlete.getName();
-        String athleteSurname = updateAthlete.getSurname();
-        int athleteAge = updateAthlete.getAge();
-        Athlete athlete = athleteRepository.findById(id).orElseThrow();
-        athlete.setName(athleteName);
-        athlete.setSurname(athleteSurname);
-        athlete.setAge(athleteAge);
+        Athlete athlete = athleteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
+        athlete.setName(updateAthlete.getName());
+        athlete.setSurname(updateAthlete.getSurname());
+        athlete.setAge(updateAthlete.getAge());
         athleteRepository.save(athlete);
     }
 
     public Set<Team> getTeamsByAthleteId(int id) {
-        Optional<Athlete> athlete = athleteRepository.findById(id);
-        if (athlete.isPresent()) {
-            Hibernate.initialize(athlete.get().getTeams());
-////        athleteRepository.findAllById(team);
-//        Set teamSet = athleteRepository.findById(id).map(Athlete::getTeams).orElse(null);
-            return athlete.get().getTeams();
-        } else {
-            return Collections.emptySet();
-        }
+        Athlete athlete = athleteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
+        return athlete.getTeams();
     }
 
     public void assignAthlete(int id, Team selectedTeam) {
         int teamId = selectedTeam.getId();
-        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
-        Team team = teamRepository.findById(teamId).orElseThrow();
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
         athlete.addTeam(team);
         athleteRepository.save(athlete);
     }
@@ -87,10 +79,10 @@ public class AthleteService { // TODO: perform code formatting
     }
 
     public void release(int id, int teamId) {
-        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow();
+        Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         Team team = athlete.getTeams().stream()
                 .filter(team1 -> team1.getId() == teamId)
-                .findFirst().orElseThrow();
+                .findFirst().orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
         athlete.removeTeam(team);
         athleteRepository.save(athlete);
     }

@@ -83,25 +83,25 @@ public class EventsController {
     @PatchMapping("/{id}/assignAthlete")
     public String addAthleteToEvent(@PathVariable int id, @ModelAttribute("athleteId") Athlete selectedAthlete) {
         eventService.assignAthlete(id, selectedAthlete);
-        return "redirect:/events/" + id;
+        return redirectToEvents + id;
     }
 
-    @PatchMapping("/{id}//{athleteId}/releaseEvent")
+    @PatchMapping("/{id}/{athleteId}/releaseAthlete")
     public String releaseAthleteFromEvent(@PathVariable("id") int id, @PathVariable("athleteId") int athleteId) {
         eventService.releaseAthlete(id, athleteId);
-        return "redirect:/events/" + id;
+        return redirectToEvents + id;
     }
 
     @PatchMapping("/{id}/assignTeam")
     public String addTeamToEvent(@PathVariable int id, @ModelAttribute("teamId") Team selectedTeam) {
         eventService.assignTeam(id, selectedTeam);
-        return "redirect:/events/" + id;
+        return redirectToEvents + id;
     }
 
-    @PatchMapping("/{id}//{teamId}/releaseTeam")
+    @PatchMapping("/{id}/{teamId}/releaseTeam")
     public String releaseTeamFromEvent(@PathVariable("id") int id, @PathVariable("teamId") int teamId) {
         eventService.releaseTeam(id, teamId);
-        return "redirect:/events/" + id;
+        return redirectToEvents + id;
     }
 
 

@@ -52,7 +52,7 @@ public class PersonDetails implements UserDetails {
         return true;
     }
 
-//    Нужно, для получения данных аутенцифицированного пользователя // TODO: n.kvetko: russian comments
+//    Нужно, для получения данных аутенцифицированного пользователя
     public Person getPerson() {
         return person;
     }

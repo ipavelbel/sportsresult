@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
-    Event findEventById(Integer id);
 
     @EntityGraph(attributePaths = "athletes")
     Optional<Event> findEventWithAthletesById(int id);

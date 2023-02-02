@@ -28,10 +28,7 @@ public class Athlete {
     @Column(name = "age")
     private int age;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "teams_athletes",
-            joinColumns = @JoinColumn(name = "athletes_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"))
+    @ManyToMany(mappedBy = "athletes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Team> teams = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "athletes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -41,46 +42,54 @@ public class TeamService { // TODO:  perform code formatting
         teamRepository.deleteById(id);
     }
 
-    public List<Team> getTeamsByEventId(Integer id) {
-
-        return teamRepository.findTeamsByEventsId(id);
-    }
 
     public Team findOne(int teamId) {
-        Optional<Team> foundTeam = teamRepository.findById(teamId);
-        return foundTeam.orElse(null);
+        return teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
     }
 
     public void update(int teamId, Team updateTeam) {
-        String teamName = updateTeam.getName();
-        String teamCoach = updateTeam.getCoach();
-        Team team = teamRepository.findById(teamId).orElseThrow();
-        team.setName(teamName);
-        team.setCoach(teamCoach);
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
+        team.setName(updateTeam.getName());
+        team.setCoach(updateTeam.getCoach());
         teamRepository.save(team);
     }
 
     public Set<Event> getTeamInEvent(int id) {
-        return teamRepository.findById(id).map(Team::getEvents).orElse(null);
+        return teamRepository.findById(id)
+                .map(Team::getEvents)
+                .orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
     }
 
-    public void assign(int id, Athlete selectedAthlete) {
+    public void assignAthleteInTeam(int id, Athlete selectedAthlete) {
         int athleteId = selectedAthlete.getId();
-        Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow();
-        Athlete athlete = athleteRepository.findById(athleteId).orElseThrow();
+        Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        Athlete athlete = athleteRepository.findById(athleteId).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + athleteId + " Not found"));
         team.addAthletes(athlete);
         teamRepository.save(team);
 
     }
 
+    public void releaseAthleteFromTeam(int id, int athleteId) {
+        Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        Athlete athlete = team.getAthletes().stream()
+                .filter(athlete1 -> athlete1.getId() == athleteId)
+                .findFirst().orElseThrow(() -> new EntityNotFoundException("Athlete with id" + athleteId + " Not found"));
+        team.removeAthletes(athlete);
+        teamRepository.save(team);
+    }
+
     public Set<Athlete> getAthletesByTeamId(int id) {
-        Optional<Team> team = teamRepository.findById(id);
-        if (team.isPresent()) {
-            Hibernate.initialize(team.get().getAthletes());
-            return team.get().getAthletes();
-        } else {
-            return Collections.emptySet();
-        }
+        Team team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        return team.getAthletes();
+    }
+
+    public void releaseEventFromTeam(int id, int eventId) {
+        Team team = teamRepository.findTeamWithEventsById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        Event event = team.getEvents().stream()
+                .filter(event1 -> event1.getId() == eventId)
+                .findFirst().orElseThrow(() -> new EntityNotFoundException("Event with id: " + eventId + " Not found"));
+        team.removeEvents(event);
+        teamRepository.save(team);
     }
 }
 

@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PersonDetailsService personDetailsService;
 
-    @Autowired // TODO: n.kvetko: unnecessary annotation. Bean will be injected without it (the annotation)
+
     public SecurityConfig(PersonDetailsService personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
@@ -46,9 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/auth/login");
 
-        // TODO: n.kvetko: "/auth/login" - string literals should not be duplicated.
-        // TODO: n.kvetko: Duplicated string literals make the process of refactoring error-prone, since you must be
-        // TODO: n.kvetko: sure to update all occurrences.
     }
 
     // Setting up authentication

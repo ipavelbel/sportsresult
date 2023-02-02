@@ -33,8 +33,10 @@
     <table th:each="team : ${teamsInEvent}">
         <tr>
             <td>
-                <span th:text="${team.getName() + ', ' + team.getCoach()}">
+<!--                <span th:text="${team.getName() + ', ' + team.getCoach()}">-->
+                <span> <a th:href="@{/teams/{id}(id=${team.id})}" th:text="${team.name}"></a>
                 </span>
+
             </td>
             <td>
                 <form th:method="PATCH" th:action="@{/events/{id}/{teamId}/releaseTeam(id=${event.getId()},teamId=${team.getId()})}">
@@ -72,7 +74,7 @@
                 </span><span th:text="${' participates in '+ event.getName()}">  </span>
             </td>
             <td>
-                <form th:method="PATCH" th:action="@{/events/{id}/{athleteId}/releaseEvent(id=${event.getId()},athleteId=${athlete.getId()})}">
+                <form th:method="PATCH" th:action="@{/events/{id}/{athleteId}/releaseAthlete(id=${event.getId()},athleteId=${athlete.getId()})}">
                     <input type="submit" value="Delete athlete"/>
                 </form>
             </td>

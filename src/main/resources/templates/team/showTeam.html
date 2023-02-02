@@ -35,6 +35,11 @@
                 <span>Team now in: </span><span th:text="${teamInEvent.getName() + ', ' + teamInEvent.getPlace()}">
                 </span>
             </td>
+            <td>
+                <form th:method="PATCH" th:action="@{/teams/{id}/{eventId}/releaseEvent(id=${team.getId()},eventId=${teamInEvent.getId()})}">
+                    <input type="submit" value="Delete event"/>
+                </form>
+            </td>
         </tr>
     </table>
 </div>
@@ -58,11 +63,16 @@
 <div th:if="${!athletesInTeams.isEmpty()}">
     <b>Athletes:</b>
     <br/>
-    <table th:each="athete : ${athletesInTeams}">
+    <table th:each="athlete : ${athletesInTeams}">
         <tr>
             <td>
-                <span th:text="${athete.getName() + ', ' + athete.getSurname()}">
+                <span th:text="${athlete.getName() + ', ' + athlete.getSurname()}">
                 </span>
+            </td>
+            <td>
+                <form th:method="PATCH" th:action="@{/teams/{id}/{athleteId}/releaseAthlete(id=${team.getId()},athleteId=${athlete.getId()})}">
+                    <input type="submit" value="Delete athlete"/>
+                </form>
             </td>
         </tr>
     </table>

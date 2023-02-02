@@ -74,7 +74,6 @@ public class TeamController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete) {
         model.addAttribute("team", teamService.findOne(id));
-
         Set<Event> teamsInEvent = teamService.getTeamInEvent(id);
 
 //        if (!teamsInEvent.isEmpty())
@@ -90,8 +89,20 @@ public class TeamController {
     @PatchMapping("/{id}/assignTeam")
     public String addTeamToEvent(@PathVariable("id") int id, @ModelAttribute("athlete") Athlete selectedAthlete) {
 
-        teamService.assign(id, selectedAthlete);
+        teamService.assignAthleteInTeam(id, selectedAthlete);
         return redirectToTeams + id;
+    }
+
+    @PatchMapping("/{id}/{athleteId}/releaseAthlete")
+    public String releaseAthleteFromTeam(@PathVariable("id") int id, @PathVariable("athleteId") int athleteId) {
+        teamService.releaseAthleteFromTeam(id, athleteId);
+        return "redirect:/teams/" + id;
+    }
+
+    @PatchMapping("/{id}/{eventId}/releaseEvent")
+    public String releaseEventFromTeam(@PathVariable("id") int id, @PathVariable("eventId") int eventId) {
+        teamService.releaseEventFromTeam(id, eventId);
+        return "redirect:/teams/" + id;
     }
 
 

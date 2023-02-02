@@ -20,7 +20,10 @@ public class Team {
     @Column(name = "coach")
     private String coach;
 
-    @ManyToMany(mappedBy = "teams", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "teams_athletes",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "athletes_id", referencedColumnName = "id"))
     private Set<Athlete> athletes = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "teams", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -124,5 +127,3 @@ public class Team {
 }
 
 
-// TODO: n.kvetko: should be eventId (don't forget to change this as well where it is used)
-// TODO: n.kvetko perform code formatting
