@@ -11,9 +11,11 @@ import com.belavus.sportsresult.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @Controller
@@ -42,12 +44,14 @@ public class TeamController {
 
     @GetMapping("/new")
     public String createTeamForm(@ModelAttribute("team") Team team) {
-
         return "team/team-create";
     }
 
     @PostMapping("")
-    public String createTeam(@ModelAttribute("team") Team team) {
+    public String createTeam(@ModelAttribute("team") @Valid Team team, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "team/team-create";
+        }
         teamService.save(team);
         return redirectToTeams;
     }
@@ -59,7 +63,11 @@ public class TeamController {
     }
 
     @PatchMapping("/{teamId}")
-    public String updateTeam(@ModelAttribute("team") Team team, @PathVariable int teamId) {
+    public String updateTeam(@ModelAttribute("team") @Valid Team team, BindingResult bindingResult,
+                             @PathVariable int teamId) {
+        if (bindingResult.hasErrors()) {
+            return "team/team-update";
+        }
         teamService.update(teamId, team);
         return redirectToTeams;
     }
@@ -77,11 +85,11 @@ public class TeamController {
         Set<Event> teamsInEvent = teamService.getTeamInEvent(id);
 
 //        if (!teamsInEvent.isEmpty())
-            model.addAttribute("teamsInEvent", teamsInEvent);
+        model.addAttribute("teamsInEvent", teamsInEvent);
 //        else
-            model.addAttribute("events", eventService.findAll());
-            model.addAttribute("athletes", athleteService.findAll());
-            model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
+        model.addAttribute("events", eventService.findAll());
+        model.addAttribute("athletes", athleteService.findAll());
+        model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
 
         return "team/showTeam";
     }

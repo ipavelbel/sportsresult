@@ -15,17 +15,21 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>City</th>
+                <th>Event date</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="event : ${events}">
                 <td th:text="${event.id}"></td>
-                <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.name}"></a></td>
+                <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.getName()}"></a></td>
 <!--                <td><a th:href="@{events/{id}/teamsInEvent(id=${event.id})}" th:text="${event.name}"></a></td>-->
-                <td th:text="${event.place}"></td>
+                <td th:text="${event.getPlace()}"></td>
+                <td th:text="${event.getDateOfEvent()}"></td>
 <!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
+<!--                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
                 <td><form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
-                    <input type="submit" value="Edit"/></form></td>
+                    <input type="submit" value="Edit"/></form>
+                </td>
 <!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
                 <td><form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
                     <input type="submit" value="Delete"/></form> </td>

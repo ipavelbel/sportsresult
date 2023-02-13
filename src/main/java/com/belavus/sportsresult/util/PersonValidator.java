@@ -1,7 +1,7 @@
 package com.belavus.sportsresult.util;
 
 import com.belavus.sportsresult.model.Person;
-import com.belavus.sportsresult.service.PersonDetailsService;
+import com.belavus.sportsresult.service.impl.PersonDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -12,10 +12,10 @@ import org.springframework.validation.Validator;
 public class PersonValidator implements Validator { // TODO:  validates that the user does not exist? If so,
     // TODO:then name the class accordingly
 
-    private final PersonDetailsService personDetailsService;
+    private final PersonDetailsServiceImpl personDetailsService;
 
     @Autowired
-    public PersonValidator(PersonDetailsService personDetailsService) {
+    public PersonValidator(PersonDetailsServiceImpl personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
 

@@ -6,23 +6,28 @@ package com.belavus.sportsresult.controller;
 import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.service.AthleteService;
+import com.belavus.sportsresult.service.EventService;
 import com.belavus.sportsresult.service.TeamService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/athletes")
 public class AthleteController {
 
-    public static final String redirectToAthletes = "redirect:/athletes";
+    public static final String redirectToAthletes = "redirect:/athletes/";
     private final AthleteService athleteService;
     private final TeamService teamService;
+    private final EventService eventService;
 
-    public AthleteController(AthleteService athleteService, TeamService teamService) {
+    public AthleteController(AthleteService athleteService, TeamService teamService, EventService eventService) {
         this.athleteService = athleteService;
         this.teamService = teamService;
+        this.eventService = eventService;
     }
 
     @GetMapping("")
@@ -37,7 +42,10 @@ public class AthleteController {
     }
 
     @PostMapping("")
-    public String createAthlete(@ModelAttribute("athlete") Athlete athlete) {
+    public String createAthlete(@ModelAttribute("athlete") @Valid Athlete athlete, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "athlete/athlete-create";
+        }
         athleteService.save(athlete);
         return redirectToAthletes;
     }
@@ -49,7 +57,11 @@ public class AthleteController {
     }
 
     @PatchMapping("/{id}")
-    public String updateAthlete(@ModelAttribute("athlete") Athlete athlete, @PathVariable("id") int id) {
+    public String updateAthlete(@ModelAttribute("athlete") @Valid Athlete athlete,BindingResult bindingResult,
+                                @PathVariable("id") int id) {
+        if(bindingResult.hasErrors()) {
+            return "athlete/athlete-update";
+        }
         athleteService.update(id, athlete);
         return redirectToAthletes;
     }
@@ -68,6 +80,7 @@ public class AthleteController {
         model.addAttribute("teamsInAthlete", athleteService.getTeamsByAthleteId(id));
 //        } else
         model.addAttribute("teams", teamService.findAll());
+        model.addAttribute("eventsInAthlete", eventService.getEventsByAthleteId(id));
 
         return "athlete/showAthlete";
     }
@@ -75,14 +88,20 @@ public class AthleteController {
     @PatchMapping("/{id}/assign")
     public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("teamId") Team selectedTeam) {
 
-        athleteService.assignAthlete(id, selectedTeam);
-        return "redirect:/athletes/" + id;
+        athleteService.assignTeam(id, selectedTeam);
+        return redirectToAthletes + id;
     }
 
-    @PatchMapping("/{id}//{teamId}/release")
+    @PatchMapping("/{id}/{teamId}/releaseAthlete")
     public String releaseAthleteFromTeam(@PathVariable("id") int id, @PathVariable("teamId") int teamId) {
-        athleteService.release(id, teamId);
-        return "redirect:/athletes/" + id;
+        athleteService.releaseAthleteFromTeam(id, teamId);
+        return redirectToAthletes + id;
+    }
+
+    @PatchMapping("/{id}/{eventId}/releaseEvent")
+    public String releaseAthleteFromEvent(@PathVariable("id") int id, @PathVariable("eventId") int eventId) {
+        athleteService.releaseAthleteFromEvent(id, eventId);
+        return redirectToAthletes + id;
     }
 }
 

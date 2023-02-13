@@ -1,4 +1,4 @@
-package com.belavus.sportsresult.service;
+package com.belavus.sportsresult.service.impl;
 
 import com.belavus.sportsresult.model.Person;
 import com.belavus.sportsresult.repository.PeopleRepository;
@@ -14,12 +14,12 @@ import java.util.Optional;
 
 
 @Service
-public class PersonDetailsService implements UserDetailsService { // TODO: n.kvetko: code formatting
+public class PersonDetailsServiceImpl implements UserDetailsService { // TODO: n.kvetko: code formatting
 
     private final PeopleRepository peopleRepository;
 
     @Autowired
-    public PersonDetailsService(PeopleRepository peopleRepository) {
+    public PersonDetailsServiceImpl(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
     }
 

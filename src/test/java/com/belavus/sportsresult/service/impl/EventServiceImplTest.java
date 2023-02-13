@@ -1,4 +1,4 @@
-package com.belavus.sportsresult.service;
+package com.belavus.sportsresult.service.impl;
 
 import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Event;
@@ -6,30 +6,25 @@ import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.EventRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class EventServiceTest {
+class EventServiceImplTest {
 
 
     @Mock
@@ -42,15 +37,15 @@ class EventServiceTest {
     TeamRepository teamRepository;
 
     @InjectMocks
-    EventService eventService;
+    EventServiceImpl eventService;
 
 
     @Test
-    void findAll() {
+    void testFindAllEvents() {
 
         // Given
-        Event event1 = new Event(3, "Turnament", "Grodno");
-        Event event2 = new Event(2, "Turnament", "Grodno");
+        Event event1 = new Event(3, "Tournament", "City1");
+        Event event2 = new Event(2, "Tournament", "City2");
         List<Event> events = Arrays.asList(event1, event2);
         when(eventRepository.findAll()).thenReturn(events);
 
@@ -60,13 +55,13 @@ class EventServiceTest {
         // Then
         assertNotNull(eventList);
         assertEquals(2, eventList.size());
-//        assertArrayEquals(Arrays.asList(event2,event1), );
+        assertTrue(events.size() == eventList.size() && events.containsAll(eventList) && eventList.containsAll(events) );
         verify(eventRepository, times(1)).findAll();
 
     }
 
     @Test
-    void save() {
+    void testSave() {
 
         // Given
         Event event = new Event(1, "Tournament", "City");
@@ -78,31 +73,6 @@ class EventServiceTest {
         ArgumentCaptor<Event> argumentCaptor = ArgumentCaptor.forClass(Event.class);
         verify(eventRepository).save(argumentCaptor.capture());
 
-    }
-
-    @Test
-    void findOne() {
-
-        // Given
-        Event event = new Event(1, "Tournament", "City");
-        when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
-
-        // When
-        Event actualEvent = eventService.findOne(1);
-
-        // Then
-        assertNotNull(actualEvent);
-        assertEquals(event,actualEvent);
-    }
-
-    @Test
-    void findOneWhenNotFound() {
-        assertThrows(EntityNotFoundException.class,()->eventService.findOne(2));
-//        when(eventRepository.findById(anyInt())).thenReturn(Optional.empty());
-//
-//        Event event = eventService.findOne(1);
-//
-//        assertNull(event);
     }
 
     @Test
@@ -119,7 +89,30 @@ class EventServiceTest {
     }
 
     @Test
-    void getTeamsByEventId() {
+    void testFindOneEvent() {
+
+        // Given
+        Event event = new Event(1, "Tournament", "City");
+        when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
+
+        // When
+        Event actualEvent = eventService.findOne(1);
+
+        // Then
+        assertNotNull(actualEvent);
+        assertEquals(event,actualEvent);
+    }
+
+    @Test
+    void testFindOneWhenEventNotFound() {
+        // Given,When,Then
+        assertThrows(EntityNotFoundException.class,()->eventService.findOne(2));
+    }
+
+
+
+    @Test
+    void testGetTeamsByEventId() {
 
         // Given
         Event event = new Event(2, "name", "place");
@@ -130,7 +123,7 @@ class EventServiceTest {
         when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
 
         // When
-        eventService.getAthletesByEventId(2);
+        eventService.getTeamsByEventId(2);
 
         // Then
         verify(eventRepository).findById(anyInt());
@@ -138,7 +131,13 @@ class EventServiceTest {
     }
 
     @Test
-    void update() {
+    void testGetTeamsByEventIdEventNotFound() {
+        // Given,When,Then
+        assertThrows(EntityNotFoundException.class,()->eventService.getTeamsByEventId(2));
+    }
+
+    @Test
+    void testUpdate() {
 
         // Given
         Event event = new Event(2,"New tournament", "New Place");
@@ -159,7 +158,7 @@ class EventServiceTest {
     }
 
     @Test
-    void assignAthlete() {
+    void testAssignAthlete() {
 
         // Given
         Event event = new Event(2, "newTournament", "newPlace");
@@ -184,7 +183,7 @@ class EventServiceTest {
     }
 
     @Test
-    void getAthletesByEventId() {
+    void testGetAthletesByEventId() {
 
         // Given
         Event event = new Event(2, "name", "place");
@@ -192,7 +191,6 @@ class EventServiceTest {
         Athlete athlete2 = new Athlete(2, "Name2", "Surname2", 33);
         event.addAthlete(athlete1);
         event.addAthlete(athlete2);
-
         when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
 
         // When
@@ -204,7 +202,14 @@ class EventServiceTest {
     }
 
     @Test
-    void releaseAthlete() {
+    void testGetAthletesByEventIdEventNotFound() {
+        // Given,When,Then
+        assertThrows(EntityNotFoundException.class,()->eventService.getAthletesByEventId(2));
+    }
+
+    @Test
+    void testReleaseAthlete() {
+
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
         Athlete athlete = new Athlete(1, "Name", "Surname", 23);
@@ -222,7 +227,7 @@ class EventServiceTest {
     }
 
     @Test
-    void assignTeam() {
+    void testAssignTeam() {
 
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
@@ -243,7 +248,7 @@ class EventServiceTest {
     }
 
     @Test
-    void releaseTeam() {
+    void testReleaseTeam() {
 
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
@@ -261,4 +266,31 @@ class EventServiceTest {
         verify(eventRepository).save(any());
 
     }
+
+
+    @Test
+    void testGetEventsByAthleteId() {
+
+        // Given
+        Event event = new Event(2, "name", "place");
+        Athlete athlete = mock(Athlete.class);
+        event.addAthlete(athlete);
+        eventRepository.save(event);
+
+        when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
+
+        // When
+        eventService.getAthletesByEventId(2);
+        Set<Athlete> athleteSet= event.getAthletes();
+        // Then
+        verify(eventRepository).findById(anyInt());
+        assertEquals(1,athleteSet.size());
+    }
+
+    @Test
+    void testGetEventsByAthleteIdEventNotFound() {
+        // Given,When,Then
+        assertThrows(EntityNotFoundException.class,()->eventService.getEventsByAthleteId(2));
+    }
+
 }

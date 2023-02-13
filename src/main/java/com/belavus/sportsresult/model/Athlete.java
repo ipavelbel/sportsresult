@@ -1,7 +1,8 @@
 package com.belavus.sportsresult.model;
 
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 //import lombok.Data;
 //import org.hibernate.Hibernate;
@@ -19,14 +20,20 @@ public class Athlete {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Size(message = "Name should be have from 1 to 50 characters", min = 1, max = 50)
+    @NotEmpty(message = "Name should not be empty")
     @Column(name = "name")
     private String name;
 
+    @Size(message = "Surname should be have from 1 to 50 characters", min = 1, max = 50)
+    @NotEmpty(message = "Surname should not be empty")
     @Column(name = "surname")
     private String surname;
 
-    @Column(name = "age")
-    private int age;
+    @NotNull(message = "Field cannot be empty")
+    @Min(message = "Age should be greater than 0", value = 1)
+    @Column(name = "age", nullable = false)
+    private Integer age;
 
     @ManyToMany(mappedBy = "athletes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Team> teams = new LinkedHashSet<>();
@@ -34,17 +41,25 @@ public class Athlete {
     @ManyToMany(mappedBy = "athletes", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Event> events = new LinkedHashSet<>();
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     public Athlete() {
     }
 
-    public Athlete(int id, String name, String surname, int age) {
-        this.id = id;
+    public Athlete(String name, String surname, int age) {
         this.name = name;
         this.surname = surname;
         this.age = age;
     }
 
-    public Athlete(String name, String surname, int age) {
+    public Athlete(int id, String name, String surname, int age) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -74,14 +89,6 @@ public class Athlete {
         this.surname = surname;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public Set<Event> getEvents() {
         return events;
     }
@@ -105,7 +112,13 @@ public class Athlete {
 
     public void removeTeam(Team team) {
         teams.remove(team);
-        team.setAthletes(null);
+        team.getAthletes().remove(this);
+    }
+
+    public void removeAthlete(Event event) {
+        events.remove(event);
+        event.getAthletes().remove(this);
+
     }
 
     @Override
@@ -121,4 +134,6 @@ public class Athlete {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+
 }

@@ -3,6 +3,9 @@ package com.belavus.sportsresult.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.*;
 
@@ -13,15 +16,22 @@ public class Event {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Size(message = "Name should be have from 1 to 50 characters", min = 1, max = 50)
+    @NotEmpty(message = "Name should not be empty")
     @Column(name = "name")
     private String name;
+
+    @Size(message = "City should be have from 1 to 50 characters", min = 1, max = 50)
+    @NotEmpty(message = "City should not be empty")
     @Column(name = "place")
     private String place;
 
-//    @Temporal(TemporalType.DATE)
-//    @Column(name = "date_of_event")
-//    @DateTimeFormat(pattern = "dd/MM/yyyy")
-//    private Date dateOfEvent;
+    @NotNull(message = "City should not be empty")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date_of_event")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private Date dateOfEvent;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(name = "events_teams",
@@ -91,13 +101,13 @@ public class Event {
         this.athletes = athletes;
     }
 
-//    public Date getDateOfEvent() {
-//        return dateOfEvent;
-//    }
-//
-//    public void setDateOfEvent(Date dateOfEvent) {
-//        this.dateOfEvent = dateOfEvent;
-//    }
+    public Date getDateOfEvent() {
+        return dateOfEvent;
+    }
+
+    public void setDateOfEvent(Date dateOfEvent) {
+        this.dateOfEvent = dateOfEvent;
+    }
 
     public void addAthlete(Athlete athlete) {
         athletes.add(athlete);

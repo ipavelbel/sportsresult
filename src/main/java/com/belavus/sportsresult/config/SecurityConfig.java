@@ -1,18 +1,15 @@
 package com.belavus.sportsresult.config;
 
 
-import com.belavus.sportsresult.service.PersonDetailsService;
+import com.belavus.sportsresult.service.impl.PersonDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.proxy.NoOp; // TODO: n.kvetko: unused import statement
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.parameters.P; // TODO: n.kvetko: unused import statement
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder; // TODO: n.kvetko: unused import statement
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -20,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final PersonDetailsService personDetailsService;
+    private final PersonDetailsServiceImpl personDetailsService;
 
-
-    public SecurityConfig(PersonDetailsService personDetailsService) {
+    @Autowired
+    public SecurityConfig(PersonDetailsServiceImpl personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
 
@@ -52,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(personDetailsService)
-                .passwordEncoder(getPasswordEncoder()); // TODO: n.kvetko: тоже напишу на русском, для более точного
+                .passwordEncoder(getPasswordEncoder()); //  для более точного
         // понимания. Нижешь ты написал метод getPasswordEncoder() с аннотацией @Bean. Это значит, что при старте
         // приложения, если текущий файл сканируется (попадает в поле зрение приложения), то этот бин будет создан.
         // (Все, что возвращает какой-то тип данных, имеет аннотацию @Bean и модификтор доступа public - все это
@@ -65,10 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder getPasswordEncoder() { // TODO: n.kvetko: it's not a getter, method name === bean name,
-        // TODO: n.kvetko: so it should just be passwordEncoder()
-        // TODO: n.kvetko: напишу на русском, чтобы было понятнее.
-        //  Тут ты объявил бин (bean declaration).
+    public PasswordEncoder getPasswordEncoder() { // it's not a getter, method name === bean name,
+        //  so it should just be passwordEncoder()
+        //  Тут объявил бин (bean declaration).
         //  Если где-то в другом компоненте, ты захочешь внедрить в него этот бин, то оно будет искать по имени этот
         //  бин, а имя ты задал getPasswordEncoder() (имя метода, без скобок --- это имя Бина)
         // то есть в компоненте тебе нужно будет писать сеттер setGetPasswordEncoder или в конструкторе писать
@@ -77,14 +73,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    // TODO: n.kvetko: Programmers should not comment out code as it bloats programs and reduces readability.
-    // TODO: n.kvetko: Unused code should be deleted and can be retrieved from source control history if required.
-//    do without encryption // TODO: n.kvetko: Passwords must always be encrypted. Never do without encryption, or
+    //  Programmers should not comment out code as it bloats programs and reduces readability.
+    //  Unused code should be deleted and can be retrieved from source control history if required.
+//Passwords must always be encrypted. Never do without encryption, or
 //     rather without hashing. Passwords need to be hashed, it means, an algorithm that converts the data into some kind
 //     of hash that cannot be "decrypted" back in any way, it's like one-way encryption.
-//    @Bean
-//    public PasswordEncoder getPasswordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
+
 
 }

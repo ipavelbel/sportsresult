@@ -1,6 +1,8 @@
 package com.belavus.sportsresult.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 
 import java.util.*;
@@ -14,9 +16,13 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Size(message = "Name should be have from 1 to 50 characters", min = 1, max = 50)
+    @NotEmpty(message = "Name should not be empty")
     @Column(name = "name")
     private String name;
 
+    @Size(message = "Field should be have from 1 to 100 characters", min = 1, max = 100)
+    @NotEmpty(message = "Coach name should not be empty")
     @Column(name = "coach")
     private String coach;
 

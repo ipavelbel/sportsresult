@@ -11,9 +11,11 @@
     <br/>
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name" placeholder="title">
+    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
     <br/>
     <label for="coach">Coach</label>
     <input type="text" th:field="*{coach}" id="coach" placeholder="coach">
+    <div style="color:red" th:if="${#fields.hasErrors('coach')}" th:errors="*{coach}">Coach Error</div>
     <br/>
     <input type="submit" value="Update team">
 </form>

@@ -10,7 +10,10 @@ import com.belavus.sportsresult.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/events")
@@ -45,7 +48,10 @@ public class EventsController {
     }
 
     @PostMapping("")
-    public String createEvent(@ModelAttribute("event") Event event) {
+    public String createEvent(@ModelAttribute("event") @Valid Event event, BindingResult bindingResult) {
+       if(bindingResult.hasErrors()){
+           return "event/event-create";
+       }
         eventService.save(event);
         return redirectToEvents;
     }
@@ -58,7 +64,11 @@ public class EventsController {
     }
 
     @PatchMapping("/{id}")
-    public String updateEvent(@ModelAttribute("event") Event event, @PathVariable("id") int id) {
+    public String updateEvent(@ModelAttribute("event") @Valid Event event, BindingResult bindingResult,
+                              @PathVariable("id") int id) {
+        if(bindingResult.hasErrors()) {
+            return "event/event-update";
+        }
         eventService.update(id, event);
         return redirectToEvents;
     }

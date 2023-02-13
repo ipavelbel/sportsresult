@@ -2,6 +2,7 @@ package com.belavus.sportsresult.controller;
 
 import com.belavus.sportsresult.model.Person;
 import com.belavus.sportsresult.service.RegistrationService;
+import com.belavus.sportsresult.service.impl.RegistrationServiceImpl;
 import com.belavus.sportsresult.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,14 +40,13 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("person") @Valid Person person,
-                                      BindingResult bindingResult) { // TODO: n.kvetko:  unnecessary line break;
+    public String performRegistration(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) { // TODO: n.kvetko:  unnecessary line break;
                                                                      // TODO: n.kvetko line length is usually 120,but it depends on the project
         personValidator.validate(person, bindingResult);
 
-
-        if (bindingResult.hasErrors()) // TODO: n.kvetko add braces to "if" statement
+        if (bindingResult.hasErrors()){ // TODO: n.kvetko add braces to "if" statement
             return "/welcome/registration";
+        }
 
         registrationService.register(person);
 

@@ -36,8 +36,31 @@
                 </span>
             </td>
             <td>
-                <form th:method="PATCH" th:action="@{/athletes/{id}/{teamId}/release(id=${athlete.getId()},teamId=${team.getId()})}">
+                <form th:method="PATCH" th:action="@{/athletes/{id}/{teamId}/releaseAthlete(id=${athlete.getId()},teamId=${team.getId()})}">
                     <input type="submit" value="Delete team"/>
+                </form>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</div>
+<div th:if="${eventsInAthlete.isEmpty()}">
+    <p>Athlete without events </p>
+    <hr/>
+</div>
+<div th:if="${!eventsInAthlete.isEmpty()}">
+    <hr/>
+    <b>Events:</b>
+    <br/>
+    <table th:each="event : ${eventsInAthlete}">
+        <tr>
+            <td>
+                <span>Athlete now in: </span><span th:text="${event.getName()+ ', ' + event.getPlace()}">
+                </span>
+            </td>
+            <td>
+                <form th:method="PATCH" th:action="@{/athletes/{id}/{eventId}/releaseEvent(id=${athlete.getId()},eventId=${event.getId()})}">
+                    <input type="submit" value="Delete event"/>
                 </form>
             </td>
         </tr>
@@ -49,21 +72,7 @@
 </div>
 <!--<div th:if="${oneTeam}">-->
 <!--    <span>Athlete now in: </span> <span th:text="${oneTeam.g}">Team Name</span>-->
-
-
 <!--</div>-->
-
 <hr/>
-
-<!--<form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">-->
-<!--    <input type="submit" value="Редактировать"/>-->
-<!--</form>-->
-
-<!--<form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">-->
-<!--    <input type="submit" value="Удалить"/>-->
-<!--</form>-->
-
-
-
 </body>
 </html>
