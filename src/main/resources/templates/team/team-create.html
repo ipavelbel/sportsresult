@@ -1,20 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first">
 <head>
     <meta charset="UTF-8">
     <title>Create team</title>
 </head>
 <body>
-<form action="#" th:action="@{/teams}" th:object="${team}" method="post">
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="name">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-  <br>
-    <label for="coach">Coach</label>
-    <input type="text" th:field="*{coach}" id="coach" placeholder="coach">
-    <div style="color:red" th:if="${#fields.hasErrors('coach')}" th:errors="*{coach}">Coach Error</div>
-  <br>
-    <input type="submit" value="Create team">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/teams}" th:object="${team}" method="post">
+            <div class="mb-3 mt-3">
+                <label for="name">Name</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="name"  class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="coach">Coach</label>
+                <input type="text" th:field="*{coach}" id="coach" placeholder="coach"  class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('coach')}" th:errors="*{coach}">Coach Error</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create team</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

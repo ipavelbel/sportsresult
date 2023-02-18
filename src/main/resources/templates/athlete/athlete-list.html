@@ -1,39 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="welcome/first"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
 <head>
-    <meta charset="UTF-8">
     <title>Athletes</title>
 </head>
 <body>
-<div th:switch="${athletes}">
-    <h2 th:case="null">No athletes yet!</h2>
-    <div th:case="*">
-        <h2>Athletes</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>Name</th>
-                <th>Surname</th>
-                <th>Age</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="athlete:${athletes}">
-                <td th:text="${athlete.id}"></td>
-                <td> <a th:href="@{/athletes/{id}(id=${athlete.id})}"th:text="${athlete.name}"></a></td>
-                <td th:text="${athlete.surname}"></td>
-                <td th:text="${athlete.age}"></td>
-                <td><form th:method="GET" th:action="@{/athletes/{id}/edit(id=${athlete.id})}">
-                    <input type="submit" value="Edit"/></form></td>
-                <td><form th:method="DELETE" th:action="@{/athletes/{id}(id=${athlete.id})}">
-                    <input type="submit" value="Delete"/></form> </td>
-            </tr>
-            </tbody>
-        </table>
+<div layout:fragment="content1">
+    <div class="container">
+        <div class="card">
+            <div class="card-header"><h3>List of Athletes</h3></div>
+            <div class="card-body">
+                <div th:switch="${athletes}">
+                    <h2 th:case="null">No athletes yet!</h2>
+                    <div th:case="*">
+                        <table class="table">
+                            <thead>
+                            <tr class="text-center">
+                                <th>id</th>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Age</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center" th:each="athlete:${athletes}">
+                                <td th:text="${athlete.id}"></td>
+                                <td><a th:href="@{/athletes/{id}(id=${athlete.id})}" th:text="${athlete.name}"></a></td>
+                                <td th:text="${athlete.surname}"></td>
+                                <td th:text="${athlete.age}"></td>
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:method="GET" th:action="@{/athletes/{id}/edit(id=${athlete.id})}">
+                                        <button type="submit" class="btn btn-secondary">Edit</button>
+                                    </form>
+                                </td>
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:method="DELETE" th:action="@{/athletes/{id}(id=${athlete.id})}">
+                                        <button type="submit" class="btn btn-danger"> Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-info" href="/athletes/new">Create athlete</a></p>
+                    <p><a class="btn btn-dark" href="/first">Back</a></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <p><a href="/athletes/new">Create athlete</a></p>
-    <p><a href="/first">Back</a></p>
 </div>
 </body>
 </html>

@@ -40,25 +40,25 @@ class AthleteControllerTest {
 
 
     @Test
-    void findAll()  throws Exception{
+    void testFindAll() throws Exception {
+        // Give
         Athlete athlete1 = new Athlete(1, "Name", "Surname", 25);
         Athlete athlete2 = new Athlete(2, "Name", "Surname", 25);
         List<Athlete> athletes = Arrays.asList(athlete1, athlete2);
-
-
         when(athleteService.findAll()).thenReturn(athletes);
 
-
+        // When
         mockMvc.perform(get("/athletes"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("athlete/athlete-list"))
                 .andExpect(model().attribute("athletes", hasSize(2)));
 
+        // Then
         verify(athleteService, times(1)).findAll();
     }
 
     @Test
-    void createAthleteForm() throws Exception{
+    void testCreateAthleteForm() throws Exception {
 
         mockMvc.perform(get("/athletes/new"))
                 .andExpect(status().isOk())
@@ -69,9 +69,9 @@ class AthleteControllerTest {
     }
 
     @Test
-    void createAthlete() throws Exception{
+    void testCreateAthlete() throws Exception {
 
-        Athlete athlete = new Athlete(1, "name", "surname", 34);
+        Athlete athlete = new Athlete(1, "name", "surname",1);
 
         mockMvc.perform(post("/athletes")
                         .param("name", athlete.getName())
@@ -85,11 +85,27 @@ class AthleteControllerTest {
     }
 
     @Test
-    void editAthleteForm() throws Exception{
+    void testCreateAthleteWhenValueOfFieldsNoValid() throws Exception {
+
+        Athlete athlete = new Athlete(1, "", "",0);
+
+        mockMvc.perform(post("/athletes")
+                        .param("name", athlete.getName())
+                        .param("surname", athlete.getSurname())
+                        .param("age", String.valueOf(athlete.getAge()))
+                        .flashAttr("athlete", new Athlete()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("athlete/athlete-create"));
+
+        verify(athleteService, times(0)).save(any(Athlete.class));
+    }
+
+    @Test
+    void testEditAthleteForm() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
 
-        when(athleteService.findOne(any())).thenReturn(athlete);
+        when(athleteService.findOne(anyInt())).thenReturn(athlete);
 
         mockMvc.perform(get("/athletes/{id}/edit", athlete.getId()))
                 .andExpect(status().isOk())
@@ -99,38 +115,64 @@ class AthleteControllerTest {
     }
 
     @Test
-    void updateAthlete() throws Exception {
+    void testUpdateAthleteWhenValueOfFieldsNoValid() throws Exception {
+
+        Athlete athlete = new Athlete(1, "name", "surname", 34);
+        Athlete athlete1 = new Athlete(2, "name2", "surname2", 0);
+
+//        doNothing().when(athleteService).update(athlete.getId(), athlete1);
+
+        RequestBuilder requestBuilder = patch("/athletes/{id}", athlete.getId())
+                .param("name", athlete1.getName())
+                .param("surname", athlete1.getSurname())
+                .param("age", String.valueOf(athlete1.getAge()))
+                .flashAttr("athlete", new Athlete());
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(view().name("athlete/athlete-update"));
+
+        verify(athleteService, times(0)).update(anyInt(),any(Athlete.class));
+
+    }
+
+    @Test
+    void testUpdateAthlete() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
         Athlete athlete1 = new Athlete(2, "name2", "surname2", 35);
 
-        doNothing().when(athleteService).update(athlete.getId(),athlete1);
+//        doNothing().when(athleteService).update(athlete.getId(), athlete1);
 
         RequestBuilder requestBuilder = patch("/athletes/{id}", athlete.getId())
-                        .param("Name", athlete1.getName())
-                        .param("Surname", athlete1.getSurname())
-                        .param("age", String.valueOf(athlete1.getAge()))
-                        .flashAttr("athlete",  new Athlete());
+                .param("name", athlete1.getName())
+                .param("surname", athlete1.getSurname())
+                .param("age", String.valueOf(athlete1.getAge()))
+                .flashAttr("athlete", new Athlete());
 
-        mockMvc. perform(requestBuilder)
+        mockMvc.perform(requestBuilder)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/athletes/"));
 
+        verify(athleteService, times(1)).update(anyInt(),any(Athlete.class));
+
     }
 
-    @Test
-    void deleteAthlete() throws Exception {
-        Athlete athlete = new Athlete(1, "name", "surname", 34);
 
-        doNothing().when(athleteService).deleteById(any());
+
+    @Test
+    void testDeleteAthlete() throws Exception {
+        Athlete athlete = new Athlete(1, "name", "surname", 34);
 
         mockMvc.perform(delete("/athletes/{id}", athlete.getId()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/athletes/"));
+
+        verify(athleteService, times(1)).deleteById(anyInt());
     }
 
     @Test
-    void show() throws Exception{
+    void testShow() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
         Team team1 = mock(Team.class);
@@ -156,18 +198,18 @@ class AthleteControllerTest {
 
         verify(athleteService, times(1)).findOne(any());
         verify(athleteService, times(1)).getTeamsByAthleteId(any());
-        verify(teamService,times(1)).findAll();
-        verify(eventService,times(1)).getEventsByAthleteId(any());
+        verify(teamService, times(1)).findAll();
+        verify(eventService, times(1)).getEventsByAthleteId(any());
     }
 
     @Test
-    void addAthleteToTeam() throws Exception{
+    void testAddAthleteToTeam() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
         Team team = new Team();
         team.setId(3);
 
-        doNothing().when(athleteService).assignTeam(anyInt(),any(Team.class));
+//        doNothing().when(athleteService).assignTeam(anyInt(), any(Team.class));
 
         mockMvc.perform(patch("/athletes//{id}/assign", athlete.getId())
                         .param("id", String.valueOf(team.getId()))
@@ -175,44 +217,44 @@ class AthleteControllerTest {
                         .param("coach", team.getCoach())
                         .flashAttr("teamId", team))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/athletes/"+ athlete.getId()));
+                .andExpect(view().name("redirect:/athletes/" + athlete.getId()));
 
-        verify(athleteService, times(1)).assignTeam(anyInt(),any(Team.class));
+        verify(athleteService, times(1)).assignTeam(anyInt(), any(Team.class));
 
 
     }
 
     @Test
-    void releaseAthleteFromTeam() throws Exception{
+    void testReleaseAthleteFromTeam() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
         Team team = new Team();
         team.setId(2);
 
-        doNothing().when(athleteService).releaseAthleteFromTeam(anyInt(),anyInt());
+        doNothing().when(athleteService).releaseAthleteFromTeam(anyInt(), anyInt());
 
 
         mockMvc.perform(patch("/athletes/{id}/{teamId}/releaseAthlete", athlete.getId(), team.getId()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/athletes/"+ athlete.getId()));
+                .andExpect(view().name("redirect:/athletes/" + athlete.getId()));
 
-        verify(athleteService, times(1)).releaseAthleteFromTeam(anyInt(),anyInt());
+        verify(athleteService, times(1)).releaseAthleteFromTeam(anyInt(), anyInt());
     }
 
     @Test
-    void releaseAthleteFromEvent() throws Exception{
+    void testReleaseAthleteFromEvent() throws Exception {
 
         Athlete athlete = new Athlete(1, "name", "surname", 34);
         Event event = new Event();
         event.setId(2);
 
-        doNothing().when(athleteService).releaseAthleteFromEvent(anyInt(),anyInt());
+        doNothing().when(athleteService).releaseAthleteFromEvent(anyInt(), anyInt());
 
 
         mockMvc.perform(patch("/athletes/{id}/{eventId}/releaseEvent", athlete.getId(), event.getId()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/athletes/"+ athlete.getId()));
+                .andExpect(view().name("redirect:/athletes/" + athlete.getId()));
 
-        verify(athleteService, times(1)).releaseAthleteFromEvent(anyInt(),anyInt());
+        verify(athleteService, times(1)).releaseAthleteFromEvent(anyInt(), anyInt());
     }
 }

@@ -1,78 +1,85 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Show</title>
 </head>
 <body>
-
-<p th:text="${athlete.getName() + ', ' + athlete.getSurname() + ', ' + athlete.getAge()}">VALUE</p>
-
-<div th:if="${teams}">
-    <span>you can add team in athlete!</span>
-    <form th:method="PATCH" th:action="@{/athletes/{id}/assign(id=${athlete.getId()})}">
-        <label for="team">Choose team</label>
-        <select th:object="${team}" th:field="*{id}" id="team">
-            <option th:each="team : ${teams}" th:value="${team.getId()}" th:text="${team.getName()}">
-            </option>
-        </select>
-        <input type="submit" value="submit"/>
-    </form>
-</div>
-
-<div th:if="${teamsInAthlete.isEmpty()}">
-    <p>Athlete without team </p>
-    <hr/>
-</div>
-<div th:if="${!teamsInAthlete.isEmpty()}">
-    <hr/>
-    <b>Teams:</b>
-    <br/>
-    <table th:each="team : ${teamsInAthlete}">
-        <tr>
-            <td>
-                <span>Athlete now in: </span><span th:text="${team.getName() + ', ' + team.getCoach()}">
-                </span>
-            </td>
-            <td>
-                <form th:method="PATCH" th:action="@{/athletes/{id}/{teamId}/releaseAthlete(id=${athlete.getId()},teamId=${team.getId()})}">
-                    <input type="submit" value="Delete team"/>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <div class="text-center">
+            <div class="card-header">
+                <h2>
+                    <p th:text="${athlete.getName() + ', ' + athlete.getSurname() + ', ' + athlete.getAge()}">VALUE</p>
+                </h2>
+            </div>
+        </div>
+        <div class="card">
+            <div sec:authorize="hasRole('ROLE_ADMIN')" class="col-md-6 offset-3 mt-3" th:if="${teams}">
+                <span>You can add team in athlete!</span>
+                <form class="form-control" th:method="PATCH"
+                      th:action="@{/athletes/{id}/assign(id=${athlete.getId()})}">
+                    <label class="form-label" for="team">Choose team:</label>
+                    <select class="form-select" th:object="${team}" th:field="*{id}" id="team">
+                        <option th:each="team : ${teams}" th:value="${team.getId()}" th:text="${team.getName()}">
+                        </option>
+                    </select>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-secondary btn-sm">Add team</button>
+                    </div>
                 </form>
-            </td>
-        </tr>
-    </table>
-    <hr/>
+            </div>
+            <div class="card-body">
+                <div class="col-md-6 offset-3 mt-3" th:if="${teamsInAthlete.isEmpty()}">
+                    <p>Athlete without team </p>
+                </div>
+                <div class="col-md-6 offset-3 mt-3" th:if="${!teamsInAthlete.isEmpty()}">
+                    <b>Teams:</b>
+                    <table class="table" th:each="team : ${teamsInAthlete}">
+                        <tr class="text-center">
+                            <td>
+                                <span>Athlete now in team: </span><span
+                                    th:text="${team.getName()}"></span>
+                                <form sec:authorize="hasRole('ROLE_ADMIN')" th:method="PATCH"
+                                      th:action="@{/athletes/{id}/{teamId}/releaseAthlete(id=${athlete.getId()},teamId=${team.getId()})}">
+                                    <button type="submit" class="btn btn-outline-warning"> Release team</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-6 offset-3 mt-3" th:if="${eventsInAthlete.isEmpty()}">
+                    <p>Athlete without events </p>
+                </div>
+                <div class="col-md-6 offset-3 mt-3" th:if="${!eventsInAthlete.isEmpty()}">
+                    <b>Events:</b>
+                    <br/>
+                    <table class="table" th:each="event : ${eventsInAthlete}">
+                        <tr class="text-center">
+                            <td>
+                                <span>Athlete competes in: </span>
+                                <span th:text="${event.getName()}">
+                                </span>
+                                <form sec:authorize="hasRole('ROLE_ADMIN')" th:method="PATCH"
+                                      th:action="@{/athletes/{id}/{eventId}/releaseEvent(id=${athlete.getId()},eventId=${event.getId()})}">
+                                    <button type="submit" class="btn btn-outline-warning"> Release event</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <p><a class="btn btn-dark" href="/athletes">Back</a></p>
+    </div>
 </div>
-<div th:if="${eventsInAthlete.isEmpty()}">
-    <p>Athlete without events </p>
-    <hr/>
-</div>
-<div th:if="${!eventsInAthlete.isEmpty()}">
-    <hr/>
-    <b>Events:</b>
-    <br/>
-    <table th:each="event : ${eventsInAthlete}">
-        <tr>
-            <td>
-                <span>Athlete now in: </span><span th:text="${event.getName()+ ', ' + event.getPlace()}">
-                </span>
-            </td>
-            <td>
-                <form th:method="PATCH" th:action="@{/athletes/{id}/{eventId}/releaseEvent(id=${athlete.getId()},eventId=${event.getId()})}">
-                    <input type="submit" value="Delete event"/>
-                </form>
-            </td>
-        </tr>
-    </table>
-    <hr/>
-</div>
-</div>
-<p><a href="/athletes">Back</a></p>
-</div>
-<!--<div th:if="${oneTeam}">-->
-<!--    <span>Athlete now in: </span> <span th:text="${oneTeam.g}">Team Name</span>-->
-<!--</div>-->
-<hr/>
 </body>
 </html>

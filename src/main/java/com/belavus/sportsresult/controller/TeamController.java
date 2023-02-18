@@ -2,9 +2,7 @@ package com.belavus.sportsresult.controller;
 
 
 import com.belavus.sportsresult.model.Athlete;
-import com.belavus.sportsresult.model.Event;
 import com.belavus.sportsresult.model.Team;
-
 import com.belavus.sportsresult.service.AthleteService;
 import com.belavus.sportsresult.service.EventService;
 import com.belavus.sportsresult.service.TeamService;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/teams")
@@ -82,20 +79,16 @@ public class TeamController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete) {
         model.addAttribute("team", teamService.findOne(id));
-        Set<Event> teamsInEvent = teamService.getTeamInEvent(id);
-
-//        if (!teamsInEvent.isEmpty())
-        model.addAttribute("teamsInEvent", teamsInEvent);
-//        else
+        model.addAttribute("teamsInEvent", teamService.getTeamInEvent(id));
+        model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
         model.addAttribute("events", eventService.findAll());
         model.addAttribute("athletes", athleteService.findAll());
-        model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
 
         return "team/showTeam";
     }
 
-    @PatchMapping("/{id}/assignTeam")
-    public String addTeamToEvent(@PathVariable("id") int id, @ModelAttribute("athlete") Athlete selectedAthlete) {
+    @PatchMapping("/{id}/assignAthlete")
+    public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("athlete") Athlete selectedAthlete) {
 
         teamService.assignAthleteInTeam(id, selectedAthlete);
         return redirectToTeams + id;

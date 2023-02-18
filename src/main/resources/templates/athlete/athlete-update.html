@@ -1,27 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first">
 <head>
-<meta charset="UTF-8">
-<title>Update athlete</title>
+    <meta charset="UTF-8">
+    <title>Update athlete</title>
 </head>
 <body>
-<form action="#" th:action="@{/athletes/{id}(id=${athlete.getId()})}" th:object="${athlete}" th:method="PATCH">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="title">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <br/>
-    <label for="surname">Surname</label>
-    <input type="text" th:field="*{surname}" id="surname" placeholder="surname">
-    <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
-    <br/>
-    <label for="age">Age</label>
-    <input type="text" th:field="*{age}" id="age" placeholder="age">
-    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
-    <br/>
-    <input type="submit" value="Update athlete">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/athletes/{id}(id=${athlete.getId()})}"
+              th:object="${athlete}"
+              th:method="PATCH">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Athlete id:</label>
+                <input type="number" name="athleteId" class="form-control" th:value="${athlete.getId()}"
+                       readonly="readonly">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label">Name</label>
+                <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="title">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="surname" class="form-label">Surname</label>
+                <input class="form-control" type="text" th:field="*{surname}" id="surname" placeholder="surname">
+                <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="age" class="form-label">Age</label>
+                <input class="form-control" type="text" th:field="*{age}" id="age" placeholder="age">
+                <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

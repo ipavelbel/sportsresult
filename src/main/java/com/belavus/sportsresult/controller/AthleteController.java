@@ -76,9 +76,7 @@ public class AthleteController {
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("team") Team team) {
 
         model.addAttribute("athlete", athleteService.findOne(id));
-//        if (!athleteInTeam.isEmpty()) {
         model.addAttribute("teamsInAthlete", athleteService.getTeamsByAthleteId(id));
-//        } else
         model.addAttribute("teams", teamService.findAll());
         model.addAttribute("eventsInAthlete", eventService.getEventsByAthleteId(id));
 
@@ -87,7 +85,6 @@ public class AthleteController {
 
     @PatchMapping("/{id}/assign")
     public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("teamId") Team selectedTeam) {
-
         athleteService.assignTeam(id, selectedTeam);
         return redirectToAthletes + id;
     }

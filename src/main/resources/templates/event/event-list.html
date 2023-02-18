@@ -1,44 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5">
 <head>
     <meta charset="UTF-8">
     <title>Events</title>
 </head>
 <body>
-<div th:switch="${events}">
-    <h2 th:case="null">No events found!</h2>
-    <div th:case="*">
-        <h2>Events</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>City</th>
-                <th>Event date</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="event : ${events}">
-                <td th:text="${event.id}"></td>
-                <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.getName()}"></a></td>
-<!--                <td><a th:href="@{events/{id}/teamsInEvent(id=${event.id})}" th:text="${event.name}"></a></td>-->
-                <td th:text="${event.getPlace()}"></td>
-                <td th:text="${event.getDateOfEvent()}"></td>
-<!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
-<!--                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
-                <td><form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
-                    <input type="submit" value="Edit"/></form>
-                </td>
-<!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
-                <td><form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
-                    <input type="submit" value="Delete"/></form> </td>
-            </tr>
-            </tbody>
-        </table>
+<div layout:fragment="content1">
+    <div class="container">
+        <div class="card">
+            <div class="card-header"><h3>List of Events</h3></div>
+            <div class="card-body">
+                <div th:switch="${events}">
+                    <h2 th:case="null">No events found!</h2>
+                    <div th:case="*">
+                        <table class="table">
+                            <thead>
+                            <tr class="text-center">
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>City</th>
+                                <th>Event date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="text-center" th:each="event : ${events}">
+                                <td th:text="${event.id}"></td>
+                                <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.getName()}"></a></td>
+                                <!--                <td><a th:href="@{events/{id}/teamsInEvent(id=${event.id})}" th:text="${event.name}"></a></td>-->
+                                <td th:text="${event.getPlace()}"></td>
+                                <td th:text="${event.getDateOfEvent()}"></td>
+                                <!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
+                                <!--                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
+                                        <button type="submit" class="btn btn-secondary">Edit</button>
+                                    </form>
+                                </td>
+                                <!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
+                                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
+                                        <button type="submit" class="btn btn-danger"> Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-info" href="/events/new">Create event</a>
+                    </p>
+                    <p><a class="btn btn-dark" href="/first">Back</a></p>
+                </div>
+            </div>
+        </div>
     </div>
-    <p><a href="/events/new">Create event</a> </p>
-    <p><a href="/first">Back</a></p>
 </div>
 </body>
 </html>

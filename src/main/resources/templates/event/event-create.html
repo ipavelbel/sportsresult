@@ -1,24 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first">
 <head>
     <meta charset="UTF-8">
     <title>Create event</title>
 </head>
 <body>
-<form action="#" th:action="@{/events}" th:object="${event}" th:method="post">
-    <label for="name">Title</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="name">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-  <br>
-    <label for="place">City</label>
-    <input type="text" th:field="*{place}" id="place" placeholder="city">
-    <div style="color:red" th:if="${#fields.hasErrors('place')}" th:errors="*{place}">Place Error</div>
-  <br>
-    <label for="place">Event date</label>
-    <input type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="event date">
-    <div style="color:red" th:if="${#fields.hasErrors('dateOfEvent')}" th:errors="*{dateOfEvent}">Event date Error</div>
-  <br>
-    <input type="submit" value="Create Event">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/events}" th:object="${event}" th:method="post">
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label">Title</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="name" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="place" class="form-label">City</label>
+                <input type="text" th:field="*{place}" id="place" placeholder="city" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('place')}" th:errors="*{place}">Place Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="place" class="form-label">Event date</label>
+                <input type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="enter date in format: yyyy/mm/dd" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('dateOfEvent')}" th:errors="*{dateOfEvent}">Event date Error
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create event</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

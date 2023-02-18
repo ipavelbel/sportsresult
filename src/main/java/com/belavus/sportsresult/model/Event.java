@@ -1,10 +1,12 @@
 package com.belavus.sportsresult.model;
 
+import com.belavus.sportsresult.util.CheckDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import java.util.*;
@@ -27,7 +29,7 @@ public class Event {
     @Column(name = "place")
     private String place;
 
-    @NotNull(message = "City should not be empty")
+    @NotNull(message = "Date should not be empty")
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_event")
     @DateTimeFormat(pattern = "yyyy/MM/dd")

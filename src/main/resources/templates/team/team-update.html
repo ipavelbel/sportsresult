@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first">
 <head>
-<meta charset="UTF-8">
-<title>Update team</title>
+    <meta charset="UTF-8">
+    <title>Update team</title>
 </head>
 <body>
-<form action="#" th:action="@{/teams/{teamId}(teamId=${team.getId()})}" th:object="${team}" th:method="PATCH">
-    <label for="id">Id</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="title">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <br/>
-    <label for="coach">Coach</label>
-    <input type="text" th:field="*{coach}" id="coach" placeholder="coach">
-    <div style="color:red" th:if="${#fields.hasErrors('coach')}" th:errors="*{coach}">Coach Error</div>
-    <br/>
-    <input type="submit" value="Update team">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/teams/{teamId}(teamId=${team.getId()})}" th:object="${team}"
+              th:method="PATCH">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Team id:</label>
+                <input type="number" name="teamId" th:field="*{id}" class="form-control" readonly="readonly" >
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label">Name</label>
+                <input class="form-control"  type="text" th:field="*{name}" id="name" placeholder="title">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="coach" class="form-label">Coach</label>
+                <input class="form-control" type="text" th:field="*{coach}" id="coach" placeholder="coach">
+                <div style="color:red" th:if="${#fields.hasErrors('coach')}" th:errors="*{coach}">Coach Error</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

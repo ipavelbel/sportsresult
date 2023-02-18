@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/first")
     public String firstPage(){
-        return "welcome/first";
+        return "welcome/welcomePage";
     }
 
 }

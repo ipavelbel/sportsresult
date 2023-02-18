@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="welcome/first">
 <head>
     <meta charset="UTF-8">
     <title>Athlete team</title>
 </head>
 <body>
-<form action="#" th:action="@{/athletes}" th:object="${athlete}" th:method="post">
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="name">
-    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-    <br>
-    <label for="surname">Surname</label>
-    <input type="text" th:field="*{surname}" id="surname" placeholder="surname">
-    <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
-    <br>
-    <label for="age">Age</label>
-    <input type="text" th:field="*{age}" id="age" placeholder="age">
-    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
-    <br>
-    <input type="submit" value="Create athlete">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/athletes}" th:object="${athlete}" th:method="post">
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="name" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="surname" class="form-label">Surname</label>
+                <input type="text" th:field="*{surname}" id="surname" placeholder="surname" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error
+                </div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="text" th:field="*{age}" id="age" placeholder="age" class="form-control">
+                <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Create athlete</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
 //                .antMatchers("/event-create","event-delete/{id}","/event-update/{id}","/event-update").hasRole("ADMIN")
-                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                .antMatchers("/auth/login", "/auth/registration", "/error", "/webjars/**").permitAll()
 //                .antMatchers("/auth/login", "/error").permitAll()
 //                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()

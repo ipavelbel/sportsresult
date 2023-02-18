@@ -1,24 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="welcome/first">
 <head>
-<meta charset="UTF-8">
-<title>Update event</title>
+    <meta charset="UTF-8">
+    <title>Update event</title>
 </head>
 <body>
-<form action="#" th:action="@{/events/{id}(id=${event.getId()})}" th:object="${event}" th:method="PATCH">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Title</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="name">
-    <br/>
-    <label for="place">City</label>
-    <input type="text" th:field="*{place}" id="place" placeholder="place">
-    <br/>
-    <label for="place">Event date</label>
-    <input type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="event date">
-    <br/>
-    <input type="submit" value="Update Event!">
-</form>
+<div layout:fragment="content1">
+    <div class="col-md-6 offset-3 mt-3">
+        <form class="form-control" action="#" th:action="@{/events/{id}(id=${event.getId()})}" th:object="${event}"
+              th:method="PATCH">
+            <div class="mb-3 mt-3">
+                <label class="form-label">Event id:</label>
+                <input type="number" name="eventId" class="form-control" th:field="*{id}" readonly="readonly">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="name" class="form-label">Title</label>
+                <input  class="form-control" type="text" th:field="*{name}" id="name" placeholder="name">
+                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="place" class="form-label">City</label>
+                <input class="form-control" type="text" th:field="*{place}" id="place" placeholder="place">
+                <div style="color:red" th:if="${#fields.hasErrors('place')}" th:errors="*{place}">Place Error</div>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="place" class="form-label">Event date</label>
+                <input class="form-control" type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="event date">
+                <div style="color:red" th:if="${#fields.hasErrors('dateOfEvent')}" th:errors="*{dateOfEvent}">Event date Error</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

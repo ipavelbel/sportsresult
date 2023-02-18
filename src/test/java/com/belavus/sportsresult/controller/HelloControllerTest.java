@@ -32,18 +32,16 @@ class HelloControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private HelloController helloController;
 
     @Test
-    public void firstPage() throws Exception {
+    public void testFirstPage() throws Exception {
 
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/first"))
                 .andExpect(status().isOk()).andReturn();
 
         ModelAndView mav = mvcResult.getModelAndView();
-        ModelAndViewAssert.assertViewName(mav, "welcome/first");
+        ModelAndViewAssert.assertViewName(mav, "welcome/welcomePage");
 
     }
 }
