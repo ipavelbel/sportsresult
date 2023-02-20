@@ -9,27 +9,27 @@ import java.util.Set;
 
 public interface EventService {
 
-    List<Event> findAll();
+    List<Event> findAllEvents();
 
-    Event save(Event event);
+    Event saveEvent(Event event);
 
-    void deleteById(Integer id);
+    void deleteEventById(Integer id);
 
-    Event findOne(Integer id);
+    Event findOneEvent(Integer id);
 
     Set<Team> getTeamsByEventId(Integer id);
 
-    void update(Integer id, Event updateEvent);
+    void updateEvent(Integer id, Event updateEvent);
 
-    void assignAthlete(Integer id, Athlete selectedAthlete);
+    void assignAthleteToEvent(Integer id, Athlete selectedAthlete);
 
     Set<Athlete> getAthletesByEventId(Integer id);
 
-    void releaseAthlete(Integer id, Integer athleteId);
+    void releaseAthleteFromEvent(Integer id, Integer athleteId);
 
-    void assignTeam(Integer id, Team selectedTeam);
+    void assignTeamToEvent(Integer id, Team selectedTeam);
 
-    void releaseTeam(Integer id, Integer teamId);
+    void releaseTeamFromEvent(Integer id, Integer teamId);
 
     Set<Event> getEventsByAthleteId(Integer id);
 }

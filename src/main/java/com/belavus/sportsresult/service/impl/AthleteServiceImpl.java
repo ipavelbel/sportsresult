@@ -33,18 +33,18 @@ public class AthleteServiceImpl implements AthleteService {
 
 
     @Override
-    public List<Athlete> findAll() {
+    public List<Athlete> findAllAthletes() {
         return athleteRepository.findAll();
     }
 
     @Override
-    public void save(Athlete athlete) {
+    public void saveAthlete(Athlete athlete) {
         athleteRepository.save(athlete);
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteById(Integer id) {
+    public void deleteAthleteById(Integer id) {
         Athlete athlete = athleteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         athlete.getEvents().forEach(event -> event.getAthletes().remove(athlete));
         athlete.getTeams().forEach(team -> team.getAthletes().remove(athlete));
@@ -52,14 +52,14 @@ public class AthleteServiceImpl implements AthleteService {
     }
 
     @Override
-    public Athlete findOne(Integer id) {
+    public Athlete findOneAthlete(Integer id) {
         Optional<Athlete> foundAthlete = athleteRepository.findById(id);
         return foundAthlete.orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void update(Integer id, Athlete updateAthlete) {
+    public void updateAthlete(Integer id, Athlete updateAthlete) {
         Athlete athlete = athleteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         athlete.setName(updateAthlete.getName());
         athlete.setSurname(updateAthlete.getSurname());
@@ -75,7 +75,7 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void assignTeam(Integer id, Team selectedTeam) {
+    public void assignTeamToAthlete(Integer id, Team selectedTeam) {
         int teamId = selectedTeam.getId();
         Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
@@ -88,7 +88,7 @@ public class AthleteServiceImpl implements AthleteService {
     public void releaseAthleteFromTeam(Integer id, Integer teamId) {
         Athlete athlete = athleteRepository.findAthleteWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         Team team = athlete.getTeams().stream()
-                .filter(team1 -> team1.getId() == teamId)
+                .filter(oneTeam -> oneTeam.getId() == teamId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
         athlete.removeTeam(team);
         athleteRepository.save(athlete);
@@ -99,7 +99,7 @@ public class AthleteServiceImpl implements AthleteService {
     public void releaseAthleteFromEvent(Integer id, Integer eventId) {
         Athlete athlete = athleteRepository.findAthleteWithEventsById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
         Event event = athlete.getEvents().stream()
-                .filter(event1 -> event1.getId() == eventId)
+                .filter(oneEvent -> oneEvent.getId() == eventId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Event with id" + eventId + " Not found"));
         athlete.removeAthlete(event);
         athleteRepository.save(athlete);

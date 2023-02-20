@@ -11,8 +11,8 @@ public interface TeamRepository extends JpaRepository<Team, Integer> {
 
 
     @EntityGraph(attributePaths = "athletes")
-    Optional<Team> findTeamWithAthletesById(int id);
+    Optional<Team> findTeamWithAthletesById(Integer id);
 
     @EntityGraph(attributePaths = "events")
-    Optional<Team> findTeamWithEventsById(int id);
+    Optional<Team> findTeamWithEventsById(Integer id);
 }

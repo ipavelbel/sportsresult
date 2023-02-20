@@ -26,7 +26,7 @@
             </div>
             <div class="mb-3 mt-3">
                 <label for="place" class="form-label">Event date</label>
-                <input class="form-control" type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="event date">
+                <input class="form-control" type="date" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="event date">
                 <div style="color:red" th:if="${#fields.hasErrors('dateOfEvent')}" th:errors="*{dateOfEvent}">Event date Error</div>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>

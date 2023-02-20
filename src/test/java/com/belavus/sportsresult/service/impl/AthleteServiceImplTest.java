@@ -39,7 +39,7 @@ class AthleteServiceImplTest {
         List<Athlete> athletes = Arrays.asList(athlete1, athlete2);
         when(athleteRepository.findAll()).thenReturn(athletes);
 
-        List<Athlete> athleteList = athleteService.findAll();
+        List<Athlete> athleteList = athleteService.findAllAthletes();
 
         assertNotNull(athleteList);
         assertEquals(2, athleteList.size());
@@ -52,7 +52,7 @@ class AthleteServiceImplTest {
 
         Athlete athlete = new Athlete("Name", "Surname", 30);
 
-        athleteService.save(athlete);
+        athleteService.saveAthlete(athlete);
 
         ArgumentCaptor<Athlete> argumentCaptor = ArgumentCaptor.forClass(Athlete.class);
         verify(athleteRepository).save(argumentCaptor.capture());
@@ -66,7 +66,7 @@ class AthleteServiceImplTest {
         athlete.setId(2);
         when(athleteRepository.findById(anyInt())).thenReturn(Optional.of(athlete));
 
-        athleteService.deleteById(athlete.getId());
+        athleteService.deleteAthleteById(athlete.getId());
 
         verify(athleteRepository).deleteById(anyInt());
 
@@ -79,7 +79,7 @@ class AthleteServiceImplTest {
         athlete.setId(2);
         when(athleteRepository.findById(anyInt())).thenReturn(Optional.of(athlete));
 
-        Athlete actualAthlete = athleteService.findOne(2);
+        Athlete actualAthlete = athleteService.findOneAthlete(2);
 
         assertNotNull(actualAthlete);
         assertEquals(athlete, actualAthlete);
@@ -88,18 +88,18 @@ class AthleteServiceImplTest {
 
     @Test
     void testFindOneWhenAthleteNotFound(){
-        assertThrows(EntityNotFoundException.class, () -> athleteService.findOne(3));
+        assertThrows(EntityNotFoundException.class, () -> athleteService.findOneAthlete(3));
     }
 
     @Test
-    void testUpdate() {
+    void testUpdateAthlete() {
         Athlete athlete = new Athlete("Name", "Surname", 30);
         athlete.setId(1);
         when(athleteRepository.findById(anyInt())).thenReturn(Optional.of(athlete));
         Athlete updatedAthleteForSave = new Athlete("Updated Name", "Updated Surname", 21);
         when(athleteRepository.save(any())).thenReturn(athlete);
 
-        athleteService.update(athlete.getId(), updatedAthleteForSave);
+        athleteService.updateAthlete(athlete.getId(), updatedAthleteForSave);
 
         ArgumentCaptor<Athlete> argumentCaptor = ArgumentCaptor.forClass(Athlete.class);
         verify(athleteRepository).findById(athlete.getId());
@@ -134,7 +134,7 @@ class AthleteServiceImplTest {
     }
 
     @Test
-    void testAssignTeam() {
+    void testAssignTeamToAthlete() {
 
         Athlete athlete = new Athlete("Name", "Surname", 30);
         athlete.setId(1);
@@ -145,7 +145,7 @@ class AthleteServiceImplTest {
         when(teamRepository.findById(anyInt())).thenReturn(Optional.of(teamForAdd));
         when(athleteRepository.save(athlete)).thenReturn(athlete);
 
-        athleteService.assignTeam(1,teamForAdd);
+        athleteService.assignTeamToAthlete(1,teamForAdd);
 
         verify(athleteRepository).findAthleteWithTeamsById(anyInt());
         verify(teamRepository).findById(anyInt());

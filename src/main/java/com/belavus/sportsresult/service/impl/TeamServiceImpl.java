@@ -31,18 +31,18 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public List<Team> findAll() {
+    public List<Team> findAllTeams() {
         return teamRepository.findAll();
     }
 
     @Override
-    public void save(Team team) {
+    public void saveTeam(Team team) {
         teamRepository.save(team);
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteById(Integer id) {
+    public void deleteTeamById(Integer id) {
         Team team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
         team.getEvents().forEach(event -> event.getTeams().remove(team));
         team.getAthletes().forEach(athlete -> athlete.getTeams().remove(team));
@@ -51,13 +51,13 @@ public class TeamServiceImpl implements TeamService {
 
 
     @Override
-    public Team findOne(Integer teamId) {
+    public Team findOneTeam(Integer teamId) {
         return teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void update(Integer teamId, Team updateTeam) {
+    public void updateTeam(Integer teamId, Team updateTeam) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
         team.setName(updateTeam.getName());
         team.setCoach(updateTeam.getCoach());
@@ -65,15 +65,15 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Set<Event> getTeamInEvent(Integer id) {
-        return teamRepository.findById(id)
-                .map(Team::getEvents)
-                .orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+    public Set<Event> getEventsByTeamId(Integer id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        return team.getEvents();
+
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void assignAthleteInTeam(Integer id, Athlete selectedAthlete) {
+    public void assignAthleteToTeam(Integer id, Athlete selectedAthlete) {
         int athleteId = selectedAthlete.getId();
         Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
         Athlete athlete = athleteRepository.findById(athleteId).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + athleteId + " Not found"));
@@ -87,7 +87,7 @@ public class TeamServiceImpl implements TeamService {
     public void releaseAthleteFromTeam(Integer id, Integer athleteId) {
         Team team = teamRepository.findTeamWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
         Athlete athlete = team.getAthletes().stream()
-                .filter(athlete1 -> athlete1.getId() == athleteId)
+                .filter(oneAthlete -> oneAthlete.getId() == athleteId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Athlete with id" + athleteId + " Not found"));
         team.removeAthletes(athlete);
         teamRepository.save(team);
@@ -104,7 +104,7 @@ public class TeamServiceImpl implements TeamService {
     public void releaseEventFromTeam(Integer id, Integer eventId) {
         Team team = teamRepository.findTeamWithEventsById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
         Event event = team.getEvents().stream()
-                .filter(event1 -> event1.getId() == eventId)
+                .filter(oneEvent -> oneEvent.getId() == eventId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Event with id: " + eventId + " Not found"));
         team.removeEvents(event);
         teamRepository.save(team);

@@ -6,6 +6,7 @@ import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.service.AthleteService;
 import com.belavus.sportsresult.service.EventService;
 import com.belavus.sportsresult.service.TeamService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,7 +22,7 @@ public class AthleteController {
     private final AthleteService athleteService;
     private final TeamService teamService;
     private final EventService eventService;
-
+    @Autowired
     public AthleteController(AthleteService athleteService, TeamService teamService, EventService eventService) {
         this.athleteService = athleteService;
         this.teamService = teamService;
@@ -29,8 +30,8 @@ public class AthleteController {
     }
 
     @GetMapping("")
-    public String findAll(Model model) {
-        model.addAttribute("athletes", athleteService.findAll());
+    public String findAllAthletes(Model model) {
+        model.addAttribute("athletes", athleteService.findAllAthletes());
         return "athlete/athlete-list";
     }
 
@@ -44,13 +45,13 @@ public class AthleteController {
         if (bindingResult.hasErrors()) {
             return "athlete/athlete-create";
         }
-        athleteService.save(athlete);
+        athleteService.saveAthlete(athlete);
         return redirectToAthletes;
     }
 
     @GetMapping("/{id}/edit")
     public String editAthleteForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("athlete", athleteService.findOne(id));
+        model.addAttribute("athlete", athleteService.findOneAthlete(id));
         return "athlete/athlete-update";
     }
 
@@ -60,22 +61,22 @@ public class AthleteController {
         if (bindingResult.hasErrors()) {
             return "athlete/athlete-update";
         }
-        athleteService.update(id, athlete);
+        athleteService.updateAthlete(id, athlete);
         return redirectToAthletes;
     }
 
     @DeleteMapping("/{id}")
     public String deleteAthlete(@PathVariable("id") int id) {
-        athleteService.deleteById(id);
+        athleteService.deleteAthleteById(id);
         return redirectToAthletes;
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("team") Team team) {
+    public String showOneAthlete(@PathVariable("id") int id, Model model, @ModelAttribute("team") Team team) {
 
-        model.addAttribute("athlete", athleteService.findOne(id));
+        model.addAttribute("athlete", athleteService.findOneAthlete(id));
         model.addAttribute("teamsInAthlete", athleteService.getTeamsByAthleteId(id));
-        model.addAttribute("teams", teamService.findAll());
+        model.addAttribute("teams", teamService.findAllTeams());
         model.addAttribute("eventsInAthlete", eventService.getEventsByAthleteId(id));
 
         return "athlete/showAthlete";
@@ -83,7 +84,7 @@ public class AthleteController {
 
     @PatchMapping("/{id}/assign")
     public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("teamId") Team selectedTeam) {
-        athleteService.assignTeam(id, selectedTeam);
+        athleteService.assignTeamToAthlete(id, selectedTeam);
         return redirectToAthletes + id;
     }
 

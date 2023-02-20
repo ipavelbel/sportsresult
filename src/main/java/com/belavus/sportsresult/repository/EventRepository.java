@@ -11,9 +11,9 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
 
     @EntityGraph(attributePaths = "athletes")
-    Optional<Event> findEventWithAthletesById(int id);
+    Optional<Event> findEventWithAthletesById(Integer id);
 
     @EntityGraph(attributePaths = "teams")
-    Optional<Event> findEventWithTeamsById(int id);
+    Optional<Event> findEventWithTeamsById(Integer id);
 
 }

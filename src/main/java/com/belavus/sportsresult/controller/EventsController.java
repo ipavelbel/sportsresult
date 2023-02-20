@@ -35,14 +35,14 @@ public class EventsController {
 
 
     @GetMapping("")
-    public String findAll(Model model) {
-        model.addAttribute("events", eventService.findAll());
+    public String findAllEvents(Model model) {
+        model.addAttribute("events", eventService.findAllEvents());
         return "event/event-list";
     }
 
 
     @GetMapping("/new")
-    public String createEventForm(@ModelAttribute("event") Event event) { // TODO: n.kvetko: unused parameters
+    public String createEventForm(@ModelAttribute("event") Event event) {
         return "event/event-create";
     }
 
@@ -51,14 +51,14 @@ public class EventsController {
         if (bindingResult.hasErrors()) {
             return "event/event-create";
         }
-        eventService.save(event);
+        eventService.saveEvent(event);
         return redirectToEvents;
     }
 
 
     @GetMapping("/{id}/edit")
     public String editEventForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("event", eventService.findOne(id));
+        model.addAttribute("event", eventService.findOneEvent(id));
         return "event/event-update";
     }
 
@@ -68,22 +68,22 @@ public class EventsController {
         if (bindingResult.hasErrors()) {
             return "event/event-update";
         }
-        eventService.update(id, event);
+        eventService.updateEvent(id, event);
         return redirectToEvents;
     }
 
     @DeleteMapping("/{id}")
     public String deleteEvent(@PathVariable("id") int id) {
-        eventService.deleteById(id);
+        eventService.deleteEventById(id);
         return redirectToEvents;
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete, @ModelAttribute("team") Team team) {
-        model.addAttribute("event", eventService.findOne(id));
-        model.addAttribute("teams", teamService.findAll());
+    public String showOneEvent(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete, @ModelAttribute("team") Team team) {
+        model.addAttribute("event", eventService.findOneEvent(id));
+        model.addAttribute("teams", teamService.findAllTeams());
         model.addAttribute("teamsInEvent", eventService.getTeamsByEventId(id));
-        model.addAttribute("athletes", athleteService.findAll());
+        model.addAttribute("athletes", athleteService.findAllAthletes());
         model.addAttribute("athletesInEvents", eventService.getAthletesByEventId(id));
 
         return "event/show";
@@ -91,25 +91,25 @@ public class EventsController {
 
     @PatchMapping("/{id}/assignAthlete")
     public String addAthleteToEvent(@PathVariable int id, @ModelAttribute("athleteId") Athlete selectedAthlete) {
-        eventService.assignAthlete(id, selectedAthlete);
+        eventService.assignAthleteToEvent(id, selectedAthlete);
         return redirectToEvents + id;
     }
 
     @PatchMapping("/{id}/{athleteId}/releaseAthlete")
     public String releaseAthleteFromEvent(@PathVariable("id") int id, @PathVariable("athleteId") int athleteId) {
-        eventService.releaseAthlete(id, athleteId);
+        eventService.releaseAthleteFromEvent(id, athleteId);
         return redirectToEvents + id;
     }
 
     @PatchMapping("/{id}/assignTeam")
     public String addTeamToEvent(@PathVariable int id, @ModelAttribute("teamId") Team selectedTeam) {
-        eventService.assignTeam(id, selectedTeam);
+        eventService.assignTeamToEvent(id, selectedTeam);
         return redirectToEvents + id;
     }
 
     @PatchMapping("/{id}/{teamId}/releaseTeam")
     public String releaseTeamFromEvent(@PathVariable("id") int id, @PathVariable("teamId") int teamId) {
-        eventService.releaseTeam(id, teamId);
+        eventService.releaseTeamFromEvent(id, teamId);
         return redirectToEvents + id;
     }
 

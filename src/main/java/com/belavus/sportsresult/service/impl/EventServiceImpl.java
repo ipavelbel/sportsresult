@@ -35,36 +35,30 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public List<Event> findAll() {
+    public List<Event> findAllEvents() {
         return eventRepository.findAll();
     }
 
     @Override
-    public Event save(Event event) { // TODO: n.kvetko: Return value of the method is never used
+    public Event saveEvent(Event event) {
         return eventRepository.save(event);
     }
 
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void deleteById(Integer id) {
+    public void deleteEventById(Integer id) {
         eventRepository.deleteById(id);
     }
 
     @Override
-    public Event findOne(Integer id) {
+    public Event findOneEvent(Integer id) {
         return eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
     }
 
     @Override
-    public Set<Team> getTeamsByEventId(Integer id) {
-        Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
-        return event.getTeams();
-    }
-
-    @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void update(Integer id, Event updateEvent) {
+    public void updateEvent(Integer id, Event updateEvent) {
         Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
         event.setName(updateEvent.getName());
         event.setPlace(updateEvent.getPlace());
@@ -74,8 +68,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Set<Team> getTeamsByEventId(Integer id) {
+        Event event = eventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
+        return event.getTeams();
+    }
+
+
+    @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void assignAthlete(Integer id, Athlete selectedAthlete) {
+    public void assignAthleteToEvent(Integer id, Athlete selectedAthlete) {
         int athleteId = selectedAthlete.getId();
         Event event = eventRepository.findEventWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
         Athlete athlete = athleteRepository.findById(athleteId).orElseThrow();
@@ -91,10 +92,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void releaseAthlete(Integer id, Integer athleteId) {
+    public void releaseAthleteFromEvent(Integer id, Integer athleteId) {
         Event event = eventRepository.findEventWithAthletesById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
         Athlete athlete = event.getAthletes().stream()
-                .filter(athlete1 -> athlete1.getId() == athleteId)
+                .filter(oneAthlete -> oneAthlete.getId() == athleteId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Athlete with id" + athleteId + " Not found"));
         event.removeAthlete(athlete);
         eventRepository.save(event);
@@ -102,7 +103,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void assignTeam(Integer id, Team selectedTeam) {
+    public void assignTeamToEvent(Integer id, Team selectedTeam) {
         int teamId = selectedTeam.getId();
         Event event = eventRepository.findEventWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
         Team team = teamRepository.findById(teamId).orElseThrow();
@@ -112,10 +113,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void releaseTeam(Integer id, Integer teamId) {
+    public void releaseTeamFromEvent(Integer id, Integer teamId) {
         Event event = eventRepository.findEventWithTeamsById(id).orElseThrow(() -> new EntityNotFoundException("Event with id: " + id + " Not found"));
         Team team = event.getTeams().stream()
-                .filter(team1 -> team1.getId() == teamId)
+                .filter(oneTeam -> oneTeam.getId() == teamId)
                 .findFirst().orElseThrow(() -> new EntityNotFoundException("Team with id" + teamId + " Not found"));
         event.removeTeam(team);
         eventRepository.save(event);

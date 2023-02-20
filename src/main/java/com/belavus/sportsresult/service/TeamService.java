@@ -9,19 +9,19 @@ import java.util.Set;
 
 public interface TeamService {
 
-    List<Team> findAll();
+    List<Team> findAllTeams();
 
-    void save(Team team);
+    void saveTeam(Team team);
 
-    void deleteById(Integer id);
+    void deleteTeamById(Integer id);
 
-    Team findOne(Integer teamId);
+    Team findOneTeam(Integer teamId);
 
-    void update(Integer teamId, Team updateTeam);
+    void updateTeam(Integer teamId, Team updateTeam);
 
-    Set<Event> getTeamInEvent(Integer id);
+    Set<Event> getEventsByTeamId(Integer id);
 
-    void assignAthleteInTeam(Integer id, Athlete selectedAthlete);
+    void assignAthleteToTeam(Integer id, Athlete selectedAthlete);
 
     void releaseAthleteFromTeam(Integer id, Integer athleteId);
 

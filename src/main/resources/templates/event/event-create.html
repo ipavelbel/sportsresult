@@ -21,7 +21,7 @@
             </div>
             <div class="mb-3 mt-3">
                 <label for="place" class="form-label">Event date</label>
-                <input type="text" th:field="*{dateOfEvent}" id="dateOfEvent" placeholder="enter date in format: yyyy/mm/dd" class="form-control">
+                <input type="date" th:field="${event.dateOfEvent}" id="dateOfEvent" placeholder="enter date in format: yyyy/mm/dd" class="form-control">
                 <div style="color:red" th:if="${#fields.hasErrors('dateOfEvent')}" th:errors="*{dateOfEvent}">Event date Error
                 </div>
             </div>

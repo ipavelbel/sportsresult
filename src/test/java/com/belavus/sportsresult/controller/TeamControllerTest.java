@@ -7,10 +7,6 @@ import com.belavus.sportsresult.service.AthleteService;
 import com.belavus.sportsresult.service.EventService;
 import com.belavus.sportsresult.service.TeamService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,16 +41,16 @@ class TeamControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void testFindAll() throws Exception {
+    void testFindAllTeam() throws Exception {
         List<Team> teams = Arrays.asList(mock(Team.class), mock(Team.class));
-        when(teamService.findAll()).thenReturn(teams);
+        when(teamService.findAllTeams()).thenReturn(teams);
 
         mockMvc.perform(get("/teams"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("team/team-list"))
                 .andExpect(model().attribute("teams", hasSize(2)));
 
-        verify(teamService, times(1)).findAll();
+        verify(teamService, times(1)).findAllTeams();
     }
 
     @Test
@@ -79,7 +74,7 @@ class TeamControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/teams/"));
 
-        verify(teamService, times(1)).save(any(Team.class));
+        verify(teamService, times(1)).saveTeam(any(Team.class));
 
     }
 
@@ -95,7 +90,7 @@ class TeamControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("team/team-create"));
 
-        verify(teamService, times(0)).save(any(Team.class));
+        verify(teamService, times(0)).saveTeam(any(Team.class));
 
     }
 
@@ -105,7 +100,7 @@ class TeamControllerTest {
         Team team = new Team("name", "trainer");
         team.setId(1);
 
-        when(teamService.findOne(anyInt())).thenReturn(team);
+        when(teamService.findOneTeam(anyInt())).thenReturn(team);
 
         mockMvc.perform(get("/teams/{id}/edit", team.getId()))
                 .andExpect(status().isOk())
@@ -129,7 +124,7 @@ class TeamControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/teams/"));
 
-        verify(teamService, times(1)).update(anyInt(), any(Team.class));
+        verify(teamService, times(1)).updateTeam(anyInt(), any(Team.class));
     }
 
     @Test
@@ -147,7 +142,7 @@ class TeamControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("team/team-update"));
 
-        verify(teamService, times(0)).update(anyInt(), any(Team.class));
+        verify(teamService, times(0)).updateTeam(anyInt(), any(Team.class));
     }
 
     @Test
@@ -159,23 +154,23 @@ class TeamControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/teams/"));
 
-        verify(teamService, times(1)).deleteById(anyInt());
+        verify(teamService, times(1)).deleteTeamById(anyInt());
     }
 
     @Test
-    void testShow() throws Exception {
+    void testShowOneTeam() throws Exception {
         Team team = new Team("Name", "Surname");
         team.setId(2);
         Set<Event> eventSet = Set.of(mock(Event.class));
         Set<Athlete> athletes = Set.of(mock(Athlete.class));
-        List<Event> eventList = Arrays.asList(mock(Event.class));
-        List<Athlete> athleteList = Arrays.asList(mock(Athlete.class));
+        List<Event> eventList = Arrays.asList(mock(Event.class),mock(Event.class));
+        List<Athlete> athleteList = Arrays.asList(mock(Athlete.class),mock(Athlete.class));
 
-        when(teamService.findOne(anyInt())).thenReturn(team);
-        when(teamService.getTeamInEvent(anyInt())).thenReturn(eventSet);
+        when(teamService.findOneTeam(anyInt())).thenReturn(team);
+        when(teamService.getEventsByTeamId(anyInt())).thenReturn(eventSet);
         when(teamService.getAthletesByTeamId(anyInt())).thenReturn(athletes);
-        when(eventService.findAll()).thenReturn(eventList);
-        when(athleteService.findAll()).thenReturn(athleteList);
+        when(eventService.findAllEvents()).thenReturn(eventList);
+        when(athleteService.findAllAthletes()).thenReturn(athleteList);
 
         mockMvc.perform(get("/teams/{id}", team.getId()))
                 .andExpect(status().isOk())
@@ -186,11 +181,11 @@ class TeamControllerTest {
                 .andExpect(model().attributeExists("athletes"))
                 .andExpect(model().attributeExists("athletesInTeams"));
 
-        verify(teamService, times(1)).findOne(any());
-        verify(teamService, times(1)).getTeamInEvent(any());
+        verify(teamService, times(1)).findOneTeam(any());
+        verify(teamService, times(1)).getEventsByTeamId(any());
         verify(teamService, times(1)).getAthletesByTeamId(any());
-        verify(eventService, times(1)).findAll();
-        verify(athleteService, times(1)).findAll();
+        verify(eventService, times(1)).findAllEvents();
+        verify(athleteService, times(1)).findAllAthletes();
     }
 
     @Test
@@ -209,7 +204,7 @@ class TeamControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/teams/" + team.getId()));
 
-        verify(teamService, times(1)).assignAthleteInTeam(anyInt(), any(Athlete.class));
+        verify(teamService, times(1)).assignAthleteToTeam(anyInt(), any(Athlete.class));
 
 
 

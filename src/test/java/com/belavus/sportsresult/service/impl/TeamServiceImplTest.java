@@ -35,14 +35,14 @@ class TeamServiceImplTest {
     TeamServiceImpl teamService;
 
     @Test
-    void testFindAll() {
+    void testFindAllTeams() {
 
         Team team1 = new Team("Name", "Trainer");
         Team team2 = new Team("Name2", "Trainer2");
         List<Team> teams = Arrays.asList(team1, team2);
         when(teamRepository.findAll()).thenReturn(teams);
 
-        List<Team> teamList = teamService.findAll();
+        List<Team> teamList = teamService.findAllTeams();
 
         assertNotNull(teamList);
         assertEquals(2, teamList.size());
@@ -56,7 +56,7 @@ class TeamServiceImplTest {
 
         Team team = new Team("name", "Trainer");
 
-        teamService.save(team);
+        teamService.saveTeam(team);
 
         ArgumentCaptor<Team> argumentCaptor = ArgumentCaptor.forClass(Team.class);
         verify(teamRepository).save(argumentCaptor.capture());
@@ -64,13 +64,13 @@ class TeamServiceImplTest {
     }
 
     @Test
-    void testDeleteById() {
+    void testDeleteTeamById() {
 
         Team team = new Team("Name", "Trainer");
         team.setId(1);
         when(teamRepository.findById(anyInt())).thenReturn(Optional.of(team));
 
-        teamService.deleteById(team.getId());
+        teamService.deleteTeamById(team.getId());
 
         verify(teamRepository).deleteById(anyInt());
     }
@@ -82,7 +82,7 @@ class TeamServiceImplTest {
         team.setId(1);
         when(teamRepository.findById(anyInt())).thenReturn(Optional.of(team));
 
-        Team actualTeam = teamService.findOne(1);
+        Team actualTeam = teamService.findOneTeam(1);
 
         assertNotNull(actualTeam);
         assertEquals(team, actualTeam);
@@ -90,18 +90,18 @@ class TeamServiceImplTest {
 
     @Test
     void testFindOneTeamWhenTeamNotFound() {
-        assertThrows(EntityNotFoundException.class, () -> teamService.findOne(5));
+        assertThrows(EntityNotFoundException.class, () -> teamService.findOneTeam(5));
     }
 
     @Test
-    void testUpdate() {
+    void testUpdateTeam() {
         Team team = new Team("Name", "Trainer");
         team.setId(1);
         when(teamRepository.findById(anyInt())).thenReturn(Optional.of(team));
         Team updatedTeamForSave = new Team("UpdatedName", "UpdatedTrainer");
         when(teamRepository.save(any())).thenReturn(team);
 
-        teamService.update(team.getId(), updatedTeamForSave);
+        teamService.updateTeam(team.getId(), updatedTeamForSave);
 
         ArgumentCaptor<Team> argumentCaptor = ArgumentCaptor.forClass(Team.class);
         verify(teamRepository).findById(team.getId());
@@ -115,17 +115,16 @@ class TeamServiceImplTest {
     @Test
     void testGetEventsByTeamId() {
 
-        Event event1 = mock(Event.class);
-        Event event2 = mock(Event.class);
+
         Team team = new Team("Name", "Trainer");
         team.setId(1);
+        Event event1 = mock(Event.class);
+        Event event2 = mock(Event.class);
         team.addEvents(event1);
         team.addEvents(event2);
-        teamRepository.save(team);
-
         when(teamRepository.findById(anyInt())).thenReturn(Optional.of(team));
 
-        teamService.getAthletesByTeamId(1);
+        teamService.getEventsByTeamId(team.getId());
         Set<Event> eventsSet = team.getEvents();
 
         verify(teamRepository).findById(anyInt());
@@ -135,7 +134,7 @@ class TeamServiceImplTest {
     }
 
     @Test
-    void testAssignAthleteInTeam() {
+    void testAssignAthleteToTeam() {
 
         Team team = new Team("Name", "Trainer");
         team.setId(2);
@@ -146,7 +145,7 @@ class TeamServiceImplTest {
         when(athleteRepository.findById(anyInt())).thenReturn(Optional.of(athleteForAdd));
         when(teamRepository.save(team)).thenReturn(team);
 
-        teamService.assignAthleteInTeam(2, athleteForAdd);
+        teamService.assignAthleteToTeam(2, athleteForAdd);
 
 
         verify(teamRepository).findTeamWithAthletesById(anyInt());

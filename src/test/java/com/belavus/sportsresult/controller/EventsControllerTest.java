@@ -43,18 +43,18 @@ class EventsControllerTest {
 
 
     @Test
-    void testFindAll() throws Exception {
+    void testFindAllEvents() throws Exception {
         Event event1 = mock(Event.class);
         Event event2 = mock(Event.class);
         List<Event> events = Arrays.asList(event1, event2);
-        when(eventService.findAll()).thenReturn(events);
+        when(eventService.findAllEvents()).thenReturn(events);
 
         mockMvc.perform(get("/events"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("event/event-list"))
                 .andExpect(model().attribute("events", hasSize(2)));
 
-        verify(eventService, times(1)).findAll();
+        verify(eventService, times(1)).findAllEvents();
     }
 
     @Test
@@ -74,12 +74,12 @@ class EventsControllerTest {
         mockMvc.perform(post("/events")
                         .param("name", event.getName())
                         .param("place", event.getPlace())
-                        .param("dateOfEvent", "2022/02/20")
+                        .param("dateOfEvent", "2022-02-20")
                         .flashAttr("event", new Event()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/"));
 
-        verify(eventService, times(1)).save(any(Event.class));
+        verify(eventService, times(1)).saveEvent(any(Event.class));
 
     }
 
@@ -96,7 +96,7 @@ class EventsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("event/event-create"));
 
-        verify(eventService, times(0)).save(any(Event.class));
+        verify(eventService, times(0)).saveEvent(any(Event.class));
 
     }
 
@@ -105,7 +105,7 @@ class EventsControllerTest {
         Event event = new Event("name", "City");
         event.setId(1);
 
-        when(eventService.findOne(anyInt())).thenReturn(event);
+        when(eventService.findOneEvent(anyInt())).thenReturn(event);
 
         mockMvc.perform(get("/events/{id}/edit", event.getId()))
                 .andExpect(status().isOk())
@@ -124,14 +124,14 @@ class EventsControllerTest {
         RequestBuilder requestBuilder = patch("/events/{id}", event.getId())
                 .param("name", updatedEvent.getName())
                 .param("place", updatedEvent.getPlace())
-                .param("dateOfEvent", "2022/02/20")
+                .param("dateOfEvent", "2022-02-20")
                 .flashAttr("event", new Event());
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/"));
 
-        verify(eventService, times(1)).update(anyInt(), any(Event.class));
+        verify(eventService, times(1)).updateEvent(anyInt(), any(Event.class));
 
     }
 
@@ -151,7 +151,7 @@ class EventsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("event/event-update"));
 
-        verify(eventService, times(0)).update(anyInt(), any(Event.class));
+        verify(eventService, times(0)).updateEvent(anyInt(), any(Event.class));
 
     }
 
@@ -164,12 +164,12 @@ class EventsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/"));
 
-        verify(eventService, times(1)).deleteById(anyInt());
+        verify(eventService, times(1)).deleteEventById(anyInt());
 
     }
 
     @Test
-    void testShow() throws Exception {
+    void testShowOneEvent() throws Exception {
         Event event = new Event("name", "City");
         event.setId(1);
         Team team1 = mock(Team.class);
@@ -180,11 +180,11 @@ class EventsControllerTest {
         List<Athlete> athleteList = Collections.singletonList(athlete);
         Set<Athlete> athletes = Set.of(athlete);
 
-        when(eventService.findOne(anyInt())).thenReturn(event);
+        when(eventService.findOneEvent(anyInt())).thenReturn(event);
         when(eventService.getAthletesByEventId(anyInt())).thenReturn(athletes);
         when(eventService.getTeamsByEventId(anyInt())).thenReturn(teams);
-        when(teamService.findAll()).thenReturn(teamList);
-        when(athleteService.findAll()).thenReturn(athleteList);
+        when(teamService.findAllTeams()).thenReturn(teamList);
+        when(athleteService.findAllAthletes()).thenReturn(athleteList);
 
 
         mockMvc.perform(get("/events/1"))
@@ -197,11 +197,11 @@ class EventsControllerTest {
                 .andExpect(model().attributeExists("athletesInEvents"));
 
 
-        verify(eventService, times(1)).findOne(any());
+        verify(eventService, times(1)).findOneEvent(any());
         verify(eventService, times(1)).getTeamsByEventId(any());
         verify(eventService, times(1)).getAthletesByEventId(any());
-        verify(teamService, times(1)).findAll();
-        verify(athleteService, times(1)).findAll();
+        verify(teamService, times(1)).findAllTeams();
+        verify(athleteService, times(1)).findAllAthletes();
     }
 
     @Test
@@ -219,7 +219,7 @@ class EventsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/" + event.getId()));
 
-        verify(eventService, times(1)).assignAthlete(anyInt(), any(Athlete.class));
+        verify(eventService, times(1)).assignAthleteToEvent(anyInt(), any(Athlete.class));
 
 
 
@@ -238,7 +238,7 @@ class EventsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/" + event.getId()));
 
-        verify(eventService, times(1)).releaseAthlete(anyInt(), anyInt());
+        verify(eventService, times(1)).releaseAthleteFromEvent(anyInt(), anyInt());
 
 
     }
@@ -258,7 +258,7 @@ class EventsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/" + event.getId()));
 
-        verify(eventService, times(1)).assignTeam(anyInt(), any(Team.class));
+        verify(eventService, times(1)).assignTeamToEvent(anyInt(), any(Team.class));
 
 
     }
@@ -274,7 +274,7 @@ class EventsControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/events/" + event.getId()));
 
-        verify(eventService, times(1)).releaseTeam(anyInt(), anyInt());
+        verify(eventService, times(1)).releaseTeamFromEvent(anyInt(), anyInt());
 
     }
 }

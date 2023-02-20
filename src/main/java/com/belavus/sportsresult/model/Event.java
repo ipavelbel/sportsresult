@@ -32,7 +32,7 @@ public class Event {
     @NotNull(message = "Date should not be empty")
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_event")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfEvent;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})

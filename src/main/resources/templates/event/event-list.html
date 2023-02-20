@@ -29,7 +29,7 @@
                                 <td th:text="${event.id}"></td>
                                 <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.getName()}"></a></td>
                                 <td th:text="${event.getPlace()}"></td>
-                                <td th:text="${event.getDateOfEvent()}"></td>
+                                <td th:text="${#dates.format(event.getDateOfEvent(),'yyyy-MM-dd')}"></td>
                                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                                     <form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
                                         <button type="submit" class="btn btn-secondary">Edit</button>

@@ -8,19 +8,19 @@ import java.util.Set;
 
 public interface AthleteService {
 
-    List<Athlete> findAll();
+    List<Athlete> findAllAthletes();
 
-    void save(Athlete athlete);
+    void saveAthlete(Athlete athlete);
 
-    void deleteById(Integer id);
+    void deleteAthleteById(Integer id);
 
-    Athlete findOne(Integer id);
+    Athlete findOneAthlete(Integer id);
 
-    void update(Integer id, Athlete updateAthlete);
+    void updateAthlete(Integer id, Athlete updateAthlete);
 
     Set<Team> getTeamsByAthleteId(Integer id);
 
-    void assignTeam(Integer id, Team selectedTeam);
+    void assignTeamToAthlete(Integer id, Team selectedTeam);
 
     void releaseAthleteFromTeam(Integer id, Integer teamId);
 

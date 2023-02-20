@@ -13,6 +13,7 @@ import java.util.Set;
 public class Athlete {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

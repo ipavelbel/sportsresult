@@ -33,8 +33,8 @@ public class TeamController {
     }
 
     @GetMapping("")
-    public String findAll(Model model) {
-        model.addAttribute("teams", teamService.findAll());
+    public String findAllTeams(Model model) {
+        model.addAttribute("teams", teamService.findAllTeams());
         return "team/team-list";
     }
 
@@ -49,13 +49,13 @@ public class TeamController {
         if (bindingResult.hasErrors()) {
             return "team/team-create";
         }
-        teamService.save(team);
+        teamService.saveTeam(team);
         return redirectToTeams;
     }
 
     @GetMapping("/{teamId}/edit")
     public String editTeamForm(@PathVariable("teamId") Integer teamId, Model model) {
-        model.addAttribute("team", teamService.findOne(teamId));
+        model.addAttribute("team", teamService.findOneTeam(teamId));
         return "team/team-update";
     }
 
@@ -65,24 +65,24 @@ public class TeamController {
         if (bindingResult.hasErrors()) {
             return "team/team-update";
         }
-        teamService.update(teamId, team);
+        teamService.updateTeam(teamId, team);
         return redirectToTeams;
     }
 
     @DeleteMapping("/{teamId}")
     public String deleteTeam(@PathVariable("teamId") Integer teamId) {
-        teamService.deleteById(teamId);
+        teamService.deleteTeamById(teamId);
         return redirectToTeams;
     }
 
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete) {
-        model.addAttribute("team", teamService.findOne(id));
-        model.addAttribute("teamsInEvent", teamService.getTeamInEvent(id));
+    public String showOneTeam(@PathVariable("id") int id, Model model, @ModelAttribute("athlete") Athlete athlete) {
+        model.addAttribute("team", teamService.findOneTeam(id));
+        model.addAttribute("teamsInEvent", teamService.getEventsByTeamId(id));
         model.addAttribute("athletesInTeams", teamService.getAthletesByTeamId(id));
-        model.addAttribute("events", eventService.findAll());
-        model.addAttribute("athletes", athleteService.findAll());
+        model.addAttribute("events", eventService.findAllEvents());
+        model.addAttribute("athletes", athleteService.findAllAthletes());
 
         return "team/showTeam";
     }
@@ -90,7 +90,7 @@ public class TeamController {
     @PatchMapping("/{id}/assignAthlete")
     public String addAthleteToTeam(@PathVariable("id") int id, @ModelAttribute("athlete") Athlete selectedAthlete) {
 
-        teamService.assignAthleteInTeam(id, selectedAthlete);
+        teamService.assignAthleteToTeam(id, selectedAthlete);
         return redirectToTeams + id;
     }
 

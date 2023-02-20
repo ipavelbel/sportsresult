@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -50,24 +49,24 @@ class EventServiceImplTest {
         when(eventRepository.findAll()).thenReturn(events);
 
         // When
-        List<Event> eventList = eventService.findAll();
+        List<Event> eventList = eventService.findAllEvents();
 
         // Then
         assertNotNull(eventList);
         assertEquals(2, eventList.size());
-        assertTrue(events.size() == eventList.size() && events.containsAll(eventList) && eventList.containsAll(events) );
+        assertTrue(events.size() == eventList.size() && events.containsAll(eventList) && eventList.containsAll(events));
         verify(eventRepository, times(1)).findAll();
 
     }
 
     @Test
-    void testSave() {
+    void testSaveEvent() {
 
         // Given
         Event event = new Event(1, "Tournament", "City");
 
         // When
-        eventService.save(event);
+        eventService.saveEvent(event);
 
         // Then
         ArgumentCaptor<Event> argumentCaptor = ArgumentCaptor.forClass(Event.class);
@@ -76,13 +75,13 @@ class EventServiceImplTest {
     }
 
     @Test
-    void testDeleteById() {
+    void testDeleteEventById() {
 
         // Given
         Event event = new Event(1, "Tournament", "City");
 
         // When
-        eventService.deleteById(event.getId());
+        eventService.deleteEventById(event.getId());
 
         // Then
         verify(eventRepository).deleteById(anyInt());
@@ -96,19 +95,39 @@ class EventServiceImplTest {
         when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
 
         // When
-        Event actualEvent = eventService.findOne(1);
+        Event actualEvent = eventService.findOneEvent(1);
 
         // Then
         assertNotNull(actualEvent);
-        assertEquals(event,actualEvent);
+        assertEquals(event, actualEvent);
     }
 
     @Test
     void testFindOneWhenEventNotFound() {
         // Given,When,Then
-        assertThrows(EntityNotFoundException.class,()->eventService.findOne(2));
+        assertThrows(EntityNotFoundException.class, () -> eventService.findOneEvent(2));
     }
 
+    @Test
+    void testUpdateEvent() {
+
+        // Given
+        Event event = new Event(2, "New tournament", "New Place");
+        when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
+        Event updatedEventForSave = new Event("Update tournament", "Update Place");
+        when(eventRepository.save(any())).thenReturn(event);
+
+        // When
+        eventService.updateEvent(event.getId(), updatedEventForSave);
+
+        // Then
+        ArgumentCaptor<Event> argumentCaptor = ArgumentCaptor.forClass(Event.class);
+        verify(eventRepository).findById(event.getId());
+        verify(eventRepository).save(argumentCaptor.capture());
+        Event captureValue = argumentCaptor.getValue();
+        assertEquals(event, captureValue);
+
+    }
 
 
     @Test
@@ -133,32 +152,12 @@ class EventServiceImplTest {
     @Test
     void testGetTeamsByEventIdEventNotFound() {
         // Given,When,Then
-        assertThrows(EntityNotFoundException.class,()->eventService.getTeamsByEventId(2));
+        assertThrows(EntityNotFoundException.class, () -> eventService.getTeamsByEventId(2));
     }
 
-    @Test
-    void testUpdate() {
-
-        // Given
-        Event event = new Event(2,"New tournament", "New Place");
-        when(eventRepository.findById(anyInt())).thenReturn(Optional.of(event));
-        Event updatedEventForSave = new Event("Update tournament", "Update Place");
-        when(eventRepository.save(any())).thenReturn(event);
-
-        // When
-        eventService.update(event.getId(), updatedEventForSave);
-
-        // Then
-        ArgumentCaptor <Event> argumentCaptor = ArgumentCaptor.forClass(Event.class);
-        verify(eventRepository).findById(event.getId());
-        verify(eventRepository).save(argumentCaptor.capture());
-        Event captureValue = argumentCaptor.getValue();
-        assertEquals(event,captureValue);
-
-    }
 
     @Test
-    void testAssignAthlete() {
+    void testAssignAthleteToEvent() {
 
         // Given
         Event event = new Event(2, "newTournament", "newPlace");
@@ -173,7 +172,7 @@ class EventServiceImplTest {
         when(eventRepository.save(event)).thenReturn(event);
 
         // When
-        eventService.assignAthlete(event.getId(), athlete);
+        eventService.assignAthleteToEvent(event.getId(), athlete);
 
         // Then
         verify(eventRepository).findEventWithAthletesById(2);
@@ -204,11 +203,11 @@ class EventServiceImplTest {
     @Test
     void testGetAthletesByEventIdEventNotFound() {
         // Given,When,Then
-        assertThrows(EntityNotFoundException.class,()->eventService.getAthletesByEventId(2));
+        assertThrows(EntityNotFoundException.class, () -> eventService.getAthletesByEventId(2));
     }
 
     @Test
-    void testReleaseAthlete() {
+    void testReleaseAthleteFromEvent() {
 
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
@@ -219,7 +218,7 @@ class EventServiceImplTest {
         when(eventRepository.save(any())).thenReturn(event);
 
         // When
-        eventService.releaseAthlete(event.getId(),athlete.getId());
+        eventService.releaseAthleteFromEvent(event.getId(), athlete.getId());
 
         // Then
         verify(eventRepository).findEventWithAthletesById(anyInt());
@@ -227,7 +226,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void testAssignTeam() {
+    void testAssignTeamToEvent() {
 
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
@@ -238,7 +237,7 @@ class EventServiceImplTest {
         when(eventRepository.save(event)).thenReturn(event);
 
         // When
-        eventService.assignTeam(2, teamForAdd);
+        eventService.assignTeamToEvent(2, teamForAdd);
 
         // Then
         verify(eventRepository).findEventWithTeamsById(anyInt());
@@ -248,7 +247,7 @@ class EventServiceImplTest {
     }
 
     @Test
-    void testReleaseTeam() {
+    void testReleaseTeamFromEvent() {
 
         // Give
         Event event = new Event(2, "newTournament", "newPlace");
@@ -259,7 +258,7 @@ class EventServiceImplTest {
         when(eventRepository.save(any())).thenReturn(event);
 
         // When
-        eventService.releaseTeam(event.getId(),team1.getId());
+        eventService.releaseTeamFromEvent(event.getId(), team1.getId());
 
         // Then
         verify(eventRepository).findEventWithTeamsById(anyInt());
@@ -281,16 +280,16 @@ class EventServiceImplTest {
 
         // When
         eventService.getAthletesByEventId(2);
-        Set<Athlete> athleteSet= event.getAthletes();
+        Set<Athlete> athleteSet = event.getAthletes();
         // Then
         verify(eventRepository).findById(anyInt());
-        assertEquals(1,athleteSet.size());
+        assertEquals(1, athleteSet.size());
     }
 
     @Test
     void testGetEventsByAthleteIdEventNotFound() {
         // Given,When,Then
-        assertThrows(EntityNotFoundException.class,()->eventService.getEventsByAthleteId(2));
+        assertThrows(EntityNotFoundException.class, () -> eventService.getEventsByAthleteId(2));
     }
 
 }
