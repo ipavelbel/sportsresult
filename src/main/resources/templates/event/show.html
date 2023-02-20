@@ -43,7 +43,6 @@
                     <table class="table" th:each="team : ${teamsInEvent}">
                         <tr class="text-center">
                             <td>
-                                <!--                <span th:text="${team.getName() + ', ' + team.getCoach()}">-->
                                 <h5>
                                     <span> <a th:href="@{/teams/{id}(id=${team.id})}" th:text="${team.name}"></a></span>
                                 </h5>

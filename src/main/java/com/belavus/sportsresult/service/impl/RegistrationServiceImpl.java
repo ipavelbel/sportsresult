@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class RegistrationServiceImpl implements RegistrationService {  // TODO: n.kvetko: code formatting
+public class RegistrationServiceImpl implements RegistrationService {
 
     private final PeopleRepository peopleRepository;
     private final PasswordEncoder passwordEncoder;

@@ -2,7 +2,7 @@ package com.belavus.sportsresult.controller;
 
 import com.belavus.sportsresult.model.Person;
 import com.belavus.sportsresult.service.RegistrationService;
-import com.belavus.sportsresult.util.PersonValidator;
+import com.belavus.sportsresult.util.PersonNameValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,17 +19,17 @@ public class AuthController {
 
 
     private final RegistrationService registrationService;
-    private final PersonValidator personValidator;
+    private final PersonNameValidator personNameValidator;
 
-    @Autowired // TODO: n.kvetko: unnecessary annotation and code formatting
-    public AuthController(RegistrationService registrationService, PersonValidator personValidator) {
+    @Autowired
+    public AuthController(RegistrationService registrationService, PersonNameValidator personNameValidator) {
         this.registrationService = registrationService;
-        this.personValidator = personValidator;
+        this.personNameValidator = personNameValidator;
     }
 
 
     @GetMapping("/login")
-    public String loginPage(){ // TODO: n.kvetko: code formatting
+    public String loginPage() {
         return "welcome/login";
     }
 
@@ -41,9 +41,9 @@ public class AuthController {
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
 
-        personValidator.validate(person, bindingResult);
+        personNameValidator.validate(person, bindingResult);
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "/welcome/registration";
         }
 

@@ -10,14 +10,15 @@ import com.belavus.sportsresult.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Set;
 
 @Service
-public class TeamServiceImpl implements TeamService { // TODO:  perform code formatting
+@Transactional
+public class TeamServiceImpl implements TeamService {
 
     private final TeamRepository teamRepository;
     private final AthleteRepository athleteRepository;
@@ -36,12 +37,15 @@ public class TeamServiceImpl implements TeamService { // TODO:  perform code for
 
     @Override
     public void save(Team team) {
-        teamRepository.save(team); // TODO: Return value of the method is never used
+        teamRepository.save(team);
     }
 
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(Integer id) {
+        Team team = teamRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Team with id" + id + " Not found"));
+        team.getEvents().forEach(event -> event.getTeams().remove(team));
+        team.getAthletes().forEach(athlete -> athlete.getTeams().remove(team));
         teamRepository.deleteById(id);
     }
 

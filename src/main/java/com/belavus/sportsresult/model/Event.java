@@ -1,15 +1,15 @@
 package com.belavus.sportsresult.model;
 
-import com.belavus.sportsresult.util.CheckDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "events")
@@ -46,7 +46,6 @@ public class Event {
             joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "athletes_id", referencedColumnName = "id"))
     private Set<Athlete> athletes = new LinkedHashSet<>();
-
 
 
     public Event() {
@@ -144,16 +143,4 @@ public class Event {
         return Objects.hash(id);
     }
 
-//    public void addTeam(Team team) {
-//        this.teamsInEvent.add(team);
-//        team.getEvents().add(this);
-//    }
-//
-//    public void removeTeams(int teamId) {
-//        Team team = this.teamsInEvent.stream().filter(t -> t.getId() == teamId).findFirst().orElse(null);
-//        if (team != null) {
-//            this.teamsInEvent.remove(team);
-//            team.getEvents().remove(this);
-//        }
-//    }
 }

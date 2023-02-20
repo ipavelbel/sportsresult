@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HelloController {
 
     @GetMapping("/first")
-    public String firstPage(){
+    public String firstPage() {
         return "welcome/welcomePage";
     }
 

@@ -3,7 +3,7 @@ package com.belavus.sportsresult.service.impl;
 
 import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Event;
-import com.belavus.sportsresult.model.Team; // TODO: n.kvetko: unused import
+import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.EventRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
-public class EventServiceImpl implements EventService { // TODO: perform code formatting
-
+public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final AthleteRepository athleteRepository;
     private final TeamRepository teamRepository;

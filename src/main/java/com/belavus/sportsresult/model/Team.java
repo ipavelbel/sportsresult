@@ -3,9 +3,9 @@ package com.belavus.sportsresult.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 
 @Entity

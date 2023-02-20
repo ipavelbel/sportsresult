@@ -28,17 +28,13 @@
                             <tr class="text-center" th:each="event : ${events}">
                                 <td th:text="${event.id}"></td>
                                 <td><a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.getName()}"></a></td>
-                                <!--                <td><a th:href="@{events/{id}/teamsInEvent(id=${event.id})}" th:text="${event.name}"></a></td>-->
                                 <td th:text="${event.getPlace()}"></td>
                                 <td th:text="${event.getDateOfEvent()}"></td>
-                                <!--                <td><a th:href="@{/events/{id}/edit(id=${event.id})}">Edit</a></td>-->
-                                <!--                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"-->
                                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                                     <form th:method="GET" th:action="@{/events/{id}/edit(id=${event.id})}">
                                         <button type="submit" class="btn btn-secondary">Edit</button>
                                     </form>
                                 </td>
-                                <!--                <td><a th:href="@{/{id}(id=${event.id})}">Delete</a></td>-->
                                 <td sec:authorize="hasRole('ROLE_ADMIN')">
                                     <form th:method="DELETE" th:action="@{/events/{id}(id=${event.id})}">
                                         <button type="submit" class="btn btn-danger"> Delete</button>

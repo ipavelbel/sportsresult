@@ -26,7 +26,6 @@ public class EventsController {
     private final AthleteService athleteService;
 
 
-
     @Autowired
     public EventsController(EventService eventService, TeamService teamService, AthleteService athleteService) {
         this.eventService = eventService;
@@ -49,9 +48,9 @@ public class EventsController {
 
     @PostMapping("")
     public String createEvent(@ModelAttribute("event") @Valid Event event, BindingResult bindingResult) {
-       if(bindingResult.hasErrors()){
-           return "event/event-create";
-       }
+        if (bindingResult.hasErrors()) {
+            return "event/event-create";
+        }
         eventService.save(event);
         return redirectToEvents;
     }
@@ -66,7 +65,7 @@ public class EventsController {
     @PatchMapping("/{id}")
     public String updateEvent(@ModelAttribute("event") @Valid Event event, BindingResult bindingResult,
                               @PathVariable("id") int id) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "event/event-update";
         }
         eventService.update(id, event);

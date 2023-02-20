@@ -3,10 +3,6 @@ package com.belavus.sportsresult.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-
-//import lombok.Data;
-//import org.hibernate.Hibernate;
-
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;

@@ -68,6 +68,7 @@ class TeamServiceImplTest {
 
         Team team = new Team("Name", "Trainer");
         team.setId(1);
+        when(teamRepository.findById(anyInt())).thenReturn(Optional.of(team));
 
         teamService.deleteById(team.getId());
 

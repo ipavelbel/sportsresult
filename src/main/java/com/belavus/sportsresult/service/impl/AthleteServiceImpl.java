@@ -7,21 +7,19 @@ import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.repository.AthleteRepository;
 import com.belavus.sportsresult.repository.TeamRepository;
 import com.belavus.sportsresult.service.AthleteService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Service
 @Transactional
-public class AthleteServiceImpl implements AthleteService { // TODO: perform code formatting
+public class AthleteServiceImpl implements AthleteService {
 
     private final AthleteRepository athleteRepository;
     private final TeamRepository teamRepository;
@@ -47,6 +45,9 @@ public class AthleteServiceImpl implements AthleteService { // TODO: perform cod
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(Integer id) {
+        Athlete athlete = athleteRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Athlete with id" + id + " Not found"));
+        athlete.getEvents().forEach(event -> event.getAthletes().remove(athlete));
+        athlete.getTeams().forEach(team -> team.getAthletes().remove(athlete));
         athleteRepository.deleteById(id);
     }
 

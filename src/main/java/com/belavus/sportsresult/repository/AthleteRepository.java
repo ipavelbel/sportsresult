@@ -13,6 +13,6 @@ public interface AthleteRepository extends JpaRepository<Athlete, Integer> {
     @EntityGraph(attributePaths = "teams")
     Optional<Athlete> findAthleteWithTeamsById(int id);
 
-   @EntityGraph(attributePaths = "events")
+    @EntityGraph(attributePaths = "events")
     Optional<Athlete> findAthleteWithEventsById(Integer id);
 }

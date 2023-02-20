@@ -64,6 +64,7 @@ class AthleteServiceImplTest {
 
         Athlete athlete = new Athlete("Name", "Surname", 30);
         athlete.setId(2);
+        when(athleteRepository.findById(anyInt())).thenReturn(Optional.of(athlete));
 
         athleteService.deleteById(athlete.getId());
 

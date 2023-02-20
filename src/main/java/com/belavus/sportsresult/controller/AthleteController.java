@@ -1,8 +1,6 @@
 package com.belavus.sportsresult.controller;
 
 
-// TODO: n.kvetko: don't forget about code formatting (ctrl + alt + L --- być może, ale nie pamiętam)
-
 import com.belavus.sportsresult.model.Athlete;
 import com.belavus.sportsresult.model.Team;
 import com.belavus.sportsresult.service.AthleteService;
@@ -43,7 +41,7 @@ public class AthleteController {
 
     @PostMapping("")
     public String createAthlete(@ModelAttribute("athlete") @Valid Athlete athlete, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "athlete/athlete-create";
         }
         athleteService.save(athlete);
@@ -57,9 +55,9 @@ public class AthleteController {
     }
 
     @PatchMapping("/{id}")
-    public String updateAthlete(@ModelAttribute("athlete") @Valid Athlete athlete,BindingResult bindingResult,
+    public String updateAthlete(@ModelAttribute("athlete") @Valid Athlete athlete, BindingResult bindingResult,
                                 @PathVariable("id") int id) {
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "athlete/athlete-update";
         }
         athleteService.update(id, athlete);

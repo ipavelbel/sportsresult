@@ -9,13 +9,12 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 @Component
-public class PersonValidator implements Validator { // TODO:  validates that the user does not exist? If so,
-    // TODO:then name the class accordingly
+public class PersonNameValidator implements Validator {
 
     private final PersonDetailsServiceImpl personDetailsService;
 
     @Autowired
-    public PersonValidator(PersonDetailsServiceImpl personDetailsService) {
+    public PersonNameValidator(PersonDetailsServiceImpl personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
 
