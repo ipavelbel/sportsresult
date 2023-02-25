@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="col-md-6 offset-3 mt-3" th:if="${teamsInEvent.isEmpty()}">
-                    <p>Athlete without team </p>
+                    <p>Team without event </p>
                     <hr/>
                 </div>
                 <div class="col-md-6 offset-3 mt-3" th:if="${!teamsInEvent.isEmpty()}">
@@ -26,7 +26,7 @@
                         <tr class="text-center">
                             <td>
                                 <h5>
-                                    <span>Team now in: </span>
+                                    <span>Team added in: </span>
                                     <span th:text="${teamInEvent.getName()}"></span>
                                 </h5>
                                 <form sec:authorize="hasRole('ROLE_ADMIN')" th:method="PATCH"

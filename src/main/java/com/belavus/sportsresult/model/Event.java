@@ -35,7 +35,7 @@ public class Event {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfEvent;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "events_teams",
             joinColumns = @JoinColumn(name = "event_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teams_id", referencedColumnName = "id"))

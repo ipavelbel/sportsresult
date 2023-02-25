@@ -22,6 +22,7 @@ public class AthleteController {
     private final AthleteService athleteService;
     private final TeamService teamService;
     private final EventService eventService;
+
     @Autowired
     public AthleteController(AthleteService athleteService, TeamService teamService, EventService eventService) {
         this.athleteService = athleteService;

@@ -42,7 +42,7 @@
                     <table class="table" th:each="team : ${teamsInAthlete}">
                         <tr class="text-center">
                             <td>
-                                <span>Athlete now in team: </span><span
+                                <span>Athlete added in team: </span><span
                                     th:text="${team.getName()}"></span>
                                 <form sec:authorize="hasRole('ROLE_ADMIN')" th:method="PATCH"
                                       th:action="@{/athletes/{id}/{teamId}/releaseAthlete(id=${athlete.getId()},teamId=${team.getId()})}">
