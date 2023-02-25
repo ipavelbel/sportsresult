@@ -57,4 +57,9 @@ also linking tables: events_teams, events_athletes, teams_athletes.
 	- Admin can add and delete athletes and events to the team.
 	- Admin can add and delete teams and events to the athlete.
 	- Admin can login to the system with login and password.
+	
+### Application Screens
+![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/loginpage.png)
+![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/listOfEvents.png)
+
 
