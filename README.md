@@ -61,7 +61,7 @@ also linking tables: events_teams, events_athletes, teams_athletes.
 ### Access rights and authorities
 ![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/rols.png)
 
-### Application Screens
+### Some application screens
 ![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/loginpage.png)
 ![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/listOfEvents.png)
 ![Image alt](https://github.com/ipavelbel/sportsresult/raw/master/pages/oneEvent.png)
