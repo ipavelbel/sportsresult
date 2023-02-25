@@ -25,7 +25,7 @@ Sports federations, sports clubs, statistical organisations.
  |                 | Technologies                                                   |
  | --------------- | -------------------------------------------------------------- |
  | Front End       | Thymeleaf, Html, Bootstrap 5                                   |
- | Back End        | JAVA 11, Spring Boot, Spring Core, Spring security. Spring MVC |
+ | Back End        | JAVA 11, Spring Boot, Spring Core, Spring security, Spring MVC |
  | Data Base Tools | PostgreSQL, Hibernate (Orm), Spring Data JPA                   |
  | Other tools     | Mockito, JUnit 5, IntelliJ IDEA, Maven, Git                    | 
 
